@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>卫星数据接入系统 - 登录</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap"
+        rel="stylesheet" />
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <!-- Theme Config -->
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "brand-dark": "#061B82",        // Core Deep Blue
+                        "brand-blue": "#1648A3",        // Button Blue
+                        "tech-cyan": "#3291C6",         // Tech Cyan
+                        "tech-highlight": "#4dabf7",    // Highlight Blue
+                        "status-active": "#4CAF50",
+                        "status-warning": "#FFC107",
+                        "status-error": "#F44336",
+                        "bg-overlay": "rgba(6, 27, 130, 0.5)",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Microsoft YaHei", "Noto Sans SC", "sans-serif"],
+                    },
+                    boxShadow: {
+                        "tech": "0 0 10px rgba(50, 145, 198, 0.3)",
+                        "tech-glow": "0 0 15px rgba(22, 72, 163, 0.8)",
+                        "card": "0 4px 8px rgba(0, 0, 0, 0.2)",
+                        "card-hover": "0 6px 12px rgba(0, 0, 0, 0.3)",
+                    },
+                    backgroundImage: {
+                        'main-gradient': 'linear-gradient(135deg, #000B30 0%, #061B82 100%)',
+                    }
+                },
+            },
+        }
+    </script>
+
+    <style>
+        /* Custom Space Background */
+        .space-bg {
+            background: linear-gradient(135deg, #000B30 0%, #061B82 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Stars */
+        .stars,
+        .stars2,
+        .stars3 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            animation: move-twinkle 200s linear infinite;
+            background-image:
+                radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0, 0, 0, 0)),
+                radial-gradient(1px 1px at 40px 70px, #ffffff, rgba(0, 0, 0, 0)),
+                radial-gradient(1px 1px at 50px 160px, #ffffff, rgba(0, 0, 0, 0)),
+                radial-gradient(1px 1px at 90px 40px, #ffffff, rgba(0, 0, 0, 0)),
+                radial-gradient(1px 1px at 130px 80px, #ffffff, rgba(0, 0, 0, 0)),
+                radial-gradient(1.5px 1.5px at 160px 120px, #ffffff, rgba(0, 0, 0, 0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            opacity: 0.6;
+        }
+
+        .stars2 {
+            background-size: 300px 300px;
+            animation-duration: 150s;
+            opacity: 0.4;
+        }
+
+        .stars3 {
+            background-size: 400px 400px;
+            animation-duration: 100s;
+            opacity: 0.3;
+        }
+
+        /* Grid Overlay */
+        .grid-overlay {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(50, 145, 198, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(50, 145, 198, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            perspective: 500px;
+            transform: translateZ(0);
+            /* Hardware accel */
+        }
+
+        /* Orbit Animation */
+        .orbit {
+            position: absolute;
+            border: 1px dashed rgba(50, 145, 198, 0.3);
+            border-radius: 50%;
+            animation: spin 60s linear infinite;
+        }
+
+        .satellite {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #4dabf7;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #4dabf7;
+            top: 50%;
+            left: -5px;
+            transform: translateY(-50%);
+        }
+
+        @keyframes move-twinkle {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(-1000px);
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        /* Floating Animation for UI */
+        .float-card {
+            background: rgba(6, 27, 130, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(50, 145, 198, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        /* Input Styles */
+        .tech-input {
+            background: rgba(6, 27, 130, 0.3);
+            border: 1px solid rgba(50, 145, 198, 0.5);
+            color: #fff;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tech-input:focus {
+            border-color: #4dabf7;
+            box-shadow: 0 0 8px rgba(77, 171, 247, 0.4);
+            outline: none;
+        }
+
+        .tech-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Button Styles */
+        .tech-button {
+            background: rgba(22, 72, 163, 0.8);
+            border: 1px solid #1648A3;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tech-button:hover {
+            box-shadow: 0 0 15px rgba(22, 72, 163, 0.8);
+            border-color: #4dabf7;
+            transform: translateY(-1px);
+        }
+
+        .tech-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .tech-button:hover::after {
+            left: 100%;
+        }
+
+        /* Text Utilities */
+        .text-tech-cyan {
+            color: #3291C6;
+        }
+
+        .text-tech-highlight {
+            color: #4dabf7;
+        }
+
+        /* Layout overrides */
+        .h-screen-safe {
+            height: 100vh;
+            /* Fallback */
+            height: 100dvh;
+        }
+    </style>
+</head>
+
+<body
+    class="font-body text-white h-screen-safe w-full overflow-hidden flex items-center justify-center space-bg relative">
+
+    <!-- Ambient Space Background Elements -->
+    <div class="stars"></div>
+    <div class="stars2"></div>
+    <div class="stars3"></div>
+    <div class="grid-overlay opacity-30"></div>
+
+    <!-- Large Planet/Orbit Abstract (Top Right) -->
+    <div
+        class="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] rounded-full bg-gradient-to-b from-[#1648A3] to-transparent opacity-10 blur-[100px] pointer-events-none">
+    </div>
+
+    <!-- Orbit Rings -->
+    <div class="orbit w-[600px] h-[600px] opacity-20 top-[50%] left-[50%]"></div>
+    <div class="orbit w-[800px] h-[800px] opacity-10 top-[50%] left-[50%] border-solid"
+        style="animation-duration: 90s; animation-direction: reverse;">
+        <div class="satellite"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div
+        class="relative z-10 w-full max-w-6xl h-full md:h-auto md:min-h-[600px] flex flex-col md:flex-row shadow-2xl rounded-2xl overflow-hidden animate-fade-in mx-4">
+
+        <!-- Left Panel: Brand / Visual -->
+        <div
+            class="relative w-full md:w-5/12 bg-cover bg-center flex flex-col items-center justify-center p-8 bg-[rgba(0,11,48,0.8)] border-r border-[rgba(50,145,198,0.3)]">
+            <!-- Decorative circle -->
+            <div class="absolute w-[300px] h-[300px] border border-tech-cyan/20 rounded-full animate-pulse"></div>
+
+            <div class="relative z-10 text-center">
+                <div
+                    class="mb-6 inline-flex p-4 rounded-full bg-brand-dark/50 border border-tech-cyan/30 backdrop-blur-md shadow-tech">
+                    <span class="material-symbols-outlined text-6xl text-tech-highlight">satellite_alt</span>
+                </div>
+                <h1 class="font-display text-4xl font-bold mb-2 tracking-tight text-white drop-shadow-lg">
+                    数据管理分系统
+                </h1>
+                <div
+                    class="h-[2px] w-16 bg-gradient-to-r from-transparent via-tech-highlight to-transparent mx-auto mb-3">
+                </div>
+                <p class="text-white/70 text-lg uppercase tracking-widest font-light font-display">
+                    Satellite Data Access
+                </p>
+
+
+            </div>
+
+            <!-- Bottom Texture -->
+            <div class="absolute bottom-0 w-full h-32 bg-gradient-to-t from-[#000B30] to-transparent opacity-80"></div>
+        </div>
+
+        <!-- Right Panel: Login Form -->
+        <div class="w-full md:w-7/12 float-card p-8 md:p-12 flex flex-col justify-center relative">
+            <!-- Header -->
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-white mb-2 tracking-wide font-display">欢迎登录 / Welcome</h2>
+
+            </div>
+
+            <!-- Form -->
+            <form class="flex flex-col gap-6 group" onsubmit="event.preventDefault();">
+                <!-- Username -->
+                <div>
+                    <label class="block text-tech-highlight text-sm font-medium mb-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[16px]">account_circle</span> 用户名 / Username
+                    </label>
+                    <input type="text" class="tech-input w-full h-12 px-4 rounded" placeholder="admin@satellite.sys"
+                        required>
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block text-tech-highlight text-sm font-medium flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[16px]">key</span> 密码 / Password
+                        </label>
+                    </div>
+                    <input type="password" class="tech-input w-full h-12 px-4 rounded" placeholder="••••••••" required>
+                </div>
+
+                <!-- Remember Me & Forgot Password -->
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center gap-2 cursor-pointer select-none">
+                        <div class="relative flex items-center">
+                            <input type="checkbox"
+                                class="peer h-4 w-4 appearance-none rounded border border-tech-cyan bg-transparent checked:bg-brand-blue checked:border-tech-highlight focus:ring-0 focus:ring-offset-0 transition-all" />
+                            <span
+                                class="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none material-symbols-outlined text-[12px]">check</span>
+                        </div>
+                        <span class="text-white/60 text-sm hover:text-white transition-colors">记住我</span>
+                    </label>
+                    <a href="#" class="text-sm text-tech-cyan hover:text-tech-highlight transition-colors">忘记密码?</a>
+                </div>
+
+                <!-- Submit Button -->
+                <button
+                    class="tech-button w-full h-12 rounded mt-2 text-white font-bold tracking-wider text-base flex items-center justify-center gap-2 shadow-lg">
+                    <span class="material-symbols-outlined">rocket_launch</span>
+                    安全登录 / Login
+                </button>
+            </form>
+
+            <!-- Footer -->
+            <div
+                class="mt-8 pt-6 border-t border-[rgba(50,145,198,0.2)] text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-4">
+
+                <div class="flex gap-4">
+                    <span
+                        class="material-symbols-outlined text-white/20 hover:text-white/60 cursor-pointer transition-colors"
+                        title="Settings">settings</span>
+                    <span
+                        class="material-symbols-outlined text-white/20 hover:text-white/60 cursor-pointer transition-colors"
+                        title="Help">help</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

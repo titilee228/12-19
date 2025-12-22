@@ -1,0 +1,288 @@
+/**
+ * 数据管理分系统 - 表单布局样式
+ * 分组、分栏、标签页等布局
+ */
+
+/* ===== 表单分组 ===== */
+.tech-form-group {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-md);
+    overflow: hidden;
+}
+
+.tech-form-group-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background: var(--bg-table-header);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tech-form-group-icon {
+    color: var(--tech-highlight);
+    font-size: 18px;
+}
+
+.tech-form-group-title {
+    font-size: var(--text-card-title);
+    font-weight: 600;
+    color: var(--tech-highlight);
+}
+
+.tech-form-group-body {
+    padding: var(--spacing-lg);
+}
+
+/* ===== 表单分栏布局 ===== */
+.tech-form-grid {
+    display: grid;
+    gap: var(--spacing-md);
+}
+
+.tech-form-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.tech-form-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.tech-form-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+    .tech-form-grid-2,
+    .tech-form-grid-3,
+    .tech-form-grid-4 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 表单项（带标签） */
+.tech-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.tech-form-field-horizontal {
+    flex-direction: row;
+    align-items: center;
+}
+
+.tech-form-field-horizontal .tech-form-label {
+    width: 100px;
+    flex-shrink: 0;
+    text-align: right;
+    padding-right: var(--spacing-sm);
+}
+
+/* 跨列 */
+.tech-form-field-full {
+    grid-column: 1 / -1;
+}
+
+.tech-form-field-span-2 {
+    grid-column: span 2;
+}
+
+/* ===== 标签页 ===== */
+.tech-tabs {
+    display: flex;
+    flex-direction: column;
+}
+
+.tech-tabs-header {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--bg-card-deep);
+}
+
+.tech-tab {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    color: var(--text-muted);
+    font-size: var(--text-body);
+    cursor: pointer;
+    transition: var(--transition-base);
+    border: none;
+    background: transparent;
+    position: relative;
+}
+
+.tech-tab:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.tech-tab.active {
+    color: var(--tech-highlight);
+    background: var(--bg-card);
+}
+
+.tech-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--tech-highlight);
+}
+
+.tech-tabs-content {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    padding: var(--spacing-lg);
+}
+
+.tech-tab-panel {
+    display: none;
+}
+
+.tech-tab-panel.active {
+    display: block;
+}
+
+
+/* ===== 辅助说明 ===== */
+.tech-form-help {
+    font-size: var(--text-small);
+    color: var(--text-muted);
+    margin-top: var(--spacing-xs);
+}
+
+.tech-form-error {
+    font-size: var(--text-small);
+    color: var(--status-error);
+    margin-top: var(--spacing-xs);
+}
+
+/* ===== 必填标记 ===== */
+.tech-form-required::after {
+    content: '*';
+    color: var(--status-error);
+    margin-left: var(--spacing-xs);
+}
+
+/* ===== 表单底部操作栏 ===== */
+.tech-form-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-lg);
+    border-top: 1px solid var(--border-color);
+    background: var(--bg-card-deep);
+    margin-top: var(--spacing-md);
+}
+
+/* ===== 卡片式表单 ===== */
+.tech-form-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.tech-form-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--bg-table-header);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tech-form-card-title {
+    font-size: var(--text-card-title);
+    font-weight: 600;
+    color: var(--tech-highlight);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.tech-form-card-body {
+    padding: var(--spacing-lg);
+}
+
+/* ===== 内联表单 ===== */
+.tech-form-inline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: var(--spacing-md);
+}
+
+.tech-form-inline .tech-form-field {
+    min-width: 150px;
+}
+
+/* ===== 紧凑表单 ===== */
+.tech-form-compact .tech-form-field {
+    gap: 2px;
+}
+
+.tech-form-compact .tech-form-label {
+    font-size: var(--text-small);
+}
+
+.tech-form-compact .tech-input {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--text-small);
+}
+
+/* ===== 只读表单 ===== */
+.tech-form-readonly .tech-input {
+    background: transparent;
+    border-color: transparent;
+    cursor: default;
+}
+
+.tech-form-readonly .tech-input:focus {
+    box-shadow: none;
+    border-color: transparent;
+}
+
+/* ===== 数据可视化区域布局 ===== */
+.tech-dashboard-grid {
+    display: grid;
+    gap: var(--spacing-lg);
+}
+
+/* 左大右小布局 */
+.tech-dashboard-grid-main {
+    grid-template-columns: 1fr 300px;
+}
+
+/* 上下布局 */
+.tech-dashboard-grid-stack {
+    grid-template-columns: 1fr;
+}
+
+/* 三列统计卡片 */
+.tech-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
+}
+
+/* 响应式 */
+@media (max-width: 1200px) {
+    .tech-dashboard-grid-main {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .tech-stat-grid {
+        grid-template-columns: 1fr;
+    }
+}

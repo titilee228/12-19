@@ -1,0 +1,11 @@
+/**
+ * 数据管理分系统 - 公共样式索引
+ * 引入此文件即可获得所有公共样式
+ */
+
+@import './variables.css';
+@import './background.css';
+@import './components.css';
+@import './navigation.css';
+@import './data-display.css';
+@import './form-layout.css';

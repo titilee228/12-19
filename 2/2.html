@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>数据管理分系统 | Data Management Subsystem</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap"
+        rel="stylesheet" />
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <!-- Theme Config -->
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "brand-dark": "#061B82",        // Core Deep Blue
+                        "brand-blue": "#1648A3",        // Button Blue
+                        "tech-cyan": "#3291C6",         // Tech Cyan
+                        "tech-highlight": "#4dabf7",    // Highlight Blue
+                        "status-active": "#4CAF50",
+                        "status-warning": "#FFC107",
+                        "status-error": "#F44336",
+                        "bg-overlay": "rgba(6, 27, 130, 0.5)",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Microsoft YaHei", "Noto Sans SC", "sans-serif"],
+                    },
+                    boxShadow: {
+                        "tech": "0 0 10px rgba(50, 145, 198, 0.3)",
+                        "tech-glow": "0 0 15px rgba(22, 72, 163, 0.8)",
+                        "card": "0 4px 8px rgba(0, 0, 0, 0.2)",
+                        "card-hover": "0 8px 16px rgba(0, 0, 0, 0.4), 0 0 8px rgba(50, 145, 198, 0.3)",
+                    },
+                    backgroundImage: {
+                        'main-gradient': 'linear-gradient(135deg, #000B30 0%, #061B82 100%)',
+                    }
+                },
+            },
+        }
+    </script>
+
+    <style>
+        /* Custom Space Background */
+        .space-bg {
+            background: linear-gradient(135deg, #000B30 0%, #061B82 100%);
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Stars */
+        .stars,
+        .stars2,
+        .stars3 {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            animation: move-twinkle 200s linear infinite;
+            background-image:
+                radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0, 0, 0, 0)),
+                radial-gradient(1px 1px at 40px 70px, #ffffff, rgba(0, 0, 0, 0)),
+                radial-gradient(1px 1px at 50px 160px, #ffffff, rgba(0, 0, 0, 0)),
+                radial-gradient(1px 1px at 90px 40px, #ffffff, rgba(0, 0, 0, 0)),
+                radial-gradient(1px 1px at 130px 80px, #ffffff, rgba(0, 0, 0, 0)),
+                radial-gradient(1.5px 1.5px at 160px 120px, #ffffff, rgba(0, 0, 0, 0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            opacity: 0.6;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .stars2 {
+            background-size: 300px 300px;
+            animation-duration: 150s;
+            opacity: 0.4;
+        }
+
+        .stars3 {
+            background-size: 400px 400px;
+            animation-duration: 100s;
+            opacity: 0.3;
+        }
+
+        /* Grid Overlay */
+        .grid-overlay {
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(50, 145, 198, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(50, 145, 198, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            perspective: 500px;
+            z-index: 0;
+        }
+
+        /* Orbit Animation (Fixed to background) */
+        .orbit-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .orbit {
+            position: absolute;
+            border: 1px dashed rgba(50, 145, 198, 0.15);
+            border-radius: 50%;
+            animation: spin 120s linear infinite;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .satellite {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #4dabf7;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #4dabf7;
+            top: 50%;
+            left: -4px;
+            transform: translateY(-50%);
+        }
+
+        @keyframes move-twinkle {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(-1000px);
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        /* Card Styles - Restored from User Preference */
+        .tech-card {
+            background: rgba(6, 27, 130, 0.4);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(50, 145, 198, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            /* Added min-dimensions for grid consistency */
+            min-width: 320px;
+            min-height: 240px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .tech-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #3291C6, transparent);
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+
+        .tech-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(77, 171, 247, 0.5);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 15px rgba(50, 145, 198, 0.2);
+            background: rgba(6, 27, 130, 0.7);
+            z-index: 10;
+        }
+
+        .tech-card:hover::before {
+            opacity: 1;
+            background: linear-gradient(90deg, transparent, #4dabf7, transparent);
+        }
+
+        /* Icon Glow */
+        .icon-glow {
+            text-shadow: 0 0 10px rgba(50, 145, 198, 0.5);
+            transition: all 0.3s;
+        }
+
+        .tech-card:hover .icon-glow {
+            text-shadow: 0 0 20px rgba(77, 171, 247, 0.8);
+            color: #4dabf7;
+            transform: scale(1.1);
+        }
+
+        /* Status Dot Pulse */
+        .status-dot-pulse {
+            box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+            animation: pulse-green 2s infinite;
+        }
+
+        @keyframes pulse-green {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+            }
+
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 6px rgba(76, 175, 80, 0);
+            }
+
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+            }
+        }
+
+        /* Header Glow */
+        .header-glow {
+            text-shadow: 0 0 20px rgba(50, 145, 198, 0.4);
+        }
+    </style>
+</head>
+
+<body class="font-body text-white space-bg">
+
+    <!-- Ambient Space Background Elements -->
+    <div class="stars"></div>
+    <div class="stars2"></div>
+    <div class="stars3"></div>
+    <div class="grid-overlay opacity-30"></div>
+
+    <div class="orbit-container">
+        <div class="orbit w-[800px] h-[800px] opacity-20"></div>
+        <div class="orbit w-[1200px] h-[1200px] opacity-10 border-solid"
+            style="animation-duration: 200s; animation-direction: reverse;">
+            <div class="satellite"></div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="relative z-10 w-full min-h-screen flex flex-col items-center pb-12 pt-32 px-4 sm:px-6 lg:px-8" style="    padding-top: 11rem;">
+
+        <!-- Header -->
+        <!-- Header -->
+        <header class="text-center mb-8 animate-fade-in flex flex-col items-center">
+            <div class="flex items-center gap-4 mb-2">
+                <div
+                    class="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-brand-dark/50 border border-tech-cyan/30 backdrop-blur-sm shadow-tech">
+                    <span class="material-symbols-outlined text-3xl text-tech-highlight">dataset</span>
+                </div>
+                <h1 class="font-display text-5xl font-bold tracking-tight text-white header-title-glow">
+                    数据管理分系统
+                </h1>
+            </div>
+
+            <div
+                class="h-[2px] w-64 bg-gradient-to-r from-transparent via-tech-highlight to-transparent mx-auto opacity-70">
+            </div>
+        </header>
+
+        <!-- Cards Grid Container (Restored Flex Layout for 3-up 2-down) -->
+        <div class="w-full max-w-7xl flex flex-wrap justify-center gap-8">
+
+            <!-- Card 1: Ground Station -->
+            <div class="tech-card rounded-xl p-8 flex-1 group cursor-pointer w-full sm:w-[calc(33.333%-2rem)] max-w-sm">
+                <div class="absolute top-4 right-4 w-2 h-2 rounded-full bg-status-active status-dot-pulse"
+                    title="System Normal"></div>
+                <!-- Restored previous icon container style -->
+                <div
+                    class="mb-6 relative p-4 rounded-full bg-brand-dark/30 border border-tech-cyan/10 group-hover:border-tech-highlight/30 transition-colors">
+                    <span class="material-symbols-outlined text-5xl text-tech-cyan icon-glow">public</span>
+                </div>
+                <h2
+                    class="text-2xl font-bold mb-3 text-white tracking-wide group-hover:text-tech-highlight transition-colors font-display text-center">
+                    地面站网管理</h2>
+                <p class="text-slate-300/80 text-sm leading-relaxed text-center">
+                    配置管理接入地面站网系统地面站，实时监视地面站运行状态，提供远程指令发送与异常处理控制。
+                </p>
+            </div>
+
+            <!-- Card 2: System Monitor -->
+            <div class="tech-card rounded-xl p-8 flex-1 group cursor-pointer w-full sm:w-[calc(33.333%-2rem)] max-w-sm">
+                <div class="absolute top-4 right-4 w-2 h-2 rounded-full bg-status-active status-dot-pulse"
+                    title="System Normal"></div>
+                <div
+                    class="mb-6 relative p-4 rounded-full bg-brand-dark/30 border border-tech-cyan/10 group-hover:border-tech-highlight/30 transition-colors">
+                    <span class="material-symbols-outlined text-5xl text-tech-cyan icon-glow">analytics</span>
+                </div>
+                <h2
+                    class="text-2xl font-bold mb-3 text-white tracking-wide group-hover:text-tech-highlight transition-colors font-display text-center">
+                    系统运行监控</h2>
+                <p class="text-slate-300/80 text-sm leading-relaxed text-center">
+                    全面监控数管接入、预处理等子系统的参数配置、日志管理、业务状态及运行告警信息。
+                </p>
+            </div>
+
+            <!-- Card 3: Data Storage -->
+            <div class="tech-card rounded-xl p-8 flex-1 group cursor-pointer w-full sm:w-[calc(33.333%-2rem)] max-w-sm">
+                <div class="absolute top-4 right-4 w-2 h-2 rounded-full bg-status-active status-dot-pulse"
+                    title="System Normal"></div>
+                <div
+                    class="mb-6 relative p-4 rounded-full bg-brand-dark/30 border border-tech-cyan/10 group-hover:border-tech-highlight/30 transition-colors">
+                    <span class="material-symbols-outlined text-5xl text-tech-cyan icon-glow">dns</span>
+                </div>
+                <h2
+                    class="text-2xl font-bold mb-3 text-white tracking-wide group-hover:text-tech-highlight transition-colors font-display text-center">
+                    数据存储管理</h2>
+                <p class="text-slate-300/80 text-sm leading-relaxed text-center">
+                    配置数据分类存储与归档策略，提供海量数据的高效存储引擎与毫秒级检索查询服务。
+                </p>
+            </div>
+
+            <div class="w-full flex justify-center gap-8 flex-wrap">
+                <!-- Card 4: Primary Broadcast (Level 1) -->
+                <div class="tech-card rounded-xl p-8 group cursor-pointer w-full max-w-sm">
+                    <div class="absolute top-4 right-4 w-2 h-2 rounded-full bg-status-active status-dot-pulse"
+                        title="System Normal"></div>
+                    <div
+                        class="mb-6 relative p-4 rounded-full bg-brand-dark/30 border border-tech-cyan/10 group-hover:border-tech-highlight/30 transition-colors">
+                        <span class="material-symbols-outlined text-5xl text-tech-cyan icon-glow">satellite_alt</span>
+                    </div>
+                    <h2
+                        class="text-2xl font-bold mb-3 text-white tracking-wide group-hover:text-tech-highlight transition-colors font-display text-center">
+                        一级播发监控</h2>
+                    <p class="text-slate-300/80 text-sm leading-relaxed text-center">
+                        接入业务处理与监测评估分系统的数据产品，实时播发至集团级核心用户专网。
+                    </p>
+                </div>
+
+                <!-- Card 5: Secondary Broadcast (Level 2) -->
+                <div class="tech-card rounded-xl p-8 group cursor-pointer w-full max-w-sm">
+                    <div class="absolute top-4 right-4 w-2 h-2 rounded-full bg-status-active status-dot-pulse"
+                        title="System Normal"></div>
+                    <div
+                        class="mb-6 relative p-4 rounded-full bg-brand-dark/30 border border-tech-cyan/10 group-hover:border-tech-highlight/30 transition-colors">
+                        <span
+                            class="material-symbols-outlined text-5xl text-tech-cyan icon-glow">settings_input_antenna</span>
+                    </div>
+                    <h2
+                        class="text-2xl font-bold mb-3 text-white tracking-wide group-hover:text-tech-highlight transition-colors font-display text-center">
+                        二级播发监控</h2>
+                    <p class="text-slate-300/80 text-sm leading-relaxed text-center">
+                        接入并分发一级播发产品数据，通过公网或宽带广播渠道播发至大众用户终端。
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+</body>
+
+</html>

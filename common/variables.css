@@ -1,0 +1,104 @@
+/**
+ * 数据管理分系统 - CSS变量系统
+ * 基于 ProjectStyleGuide.md 规范
+ */
+
+:root {
+    /* ===== 品牌主色 (Brand Colors) ===== */
+    --brand-dark: #061B82;           /* 核心深蓝 - 背景、侧边栏、卡片底色 */
+    --brand-blue: #1648A3;           /* 按钮蓝 - 主要按钮背景 */
+    --tech-cyan: #3291C6;            /* 科技青 - 边框、图标背景、次要文字 */
+    --tech-highlight: #4dabf7;       /* 高亮蓝 - 关键文字、链接、选中状态 */
+    
+    /* ===== 状态指示色 (Status Colors) ===== */
+    --status-normal: #4CAF50;        /* 正常/活跃 - 明亮绿色 */
+    --status-normal-alt: #67c23a;    /* 正常备选色 */
+    --status-warning: #FFC107;       /* 警告 - 琥珀色 */
+    --status-warning-alt: #e6a23c;   /* 警告备选色 */
+    --status-error: #F44336;         /* 错误/异常 - 鲜红色 */
+    --status-error-alt: #f56c6c;     /* 错误备选色 */
+    --status-default: #3291C6;       /* 普通 - 科技青 */
+    
+    /* ===== 中性色 (Neutrals) ===== */
+    --text-primary: #ffffff;         /* 主要文字 - 纯白 */
+    --text-primary-alt: #e0e0e0;     /* 主要文字备选 - 极淡灰 */
+    --text-secondary: rgba(255, 255, 255, 0.7);  /* 次要文字 */
+    --text-muted: #B8BCC8;           /* 辅助文字/禁用文字 */
+    --text-placeholder: rgba(255, 255, 255, 0.5); /* 占位符文字 */
+
+    /* ===== 边框色 ===== */
+    --border-color: rgba(50, 145, 198, 0.3);      /* 默认边框 */
+    --border-color-hover: rgba(50, 145, 198, 0.5); /* 悬停边框 */
+    --border-color-focus: #4dabf7;                /* 聚焦边框 */
+    
+    /* ===== 背景色 ===== */
+    --bg-gradient-start: #000B30;    /* 主渐变起始色 */
+    --bg-gradient-end: #061B82;      /* 主渐变结束色 */
+    --bg-card: rgba(6, 27, 130, 0.5);            /* 卡片背景 */
+    --bg-card-hover: rgba(6, 27, 130, 0.7);      /* 卡片悬停背景 */
+    --bg-card-deep: rgba(0, 11, 48, 0.6);        /* 更深层级背景 */
+    --bg-overlay: rgba(6, 27, 130, 0.4);         /* 遮罩背景 */
+    --bg-sidebar: rgba(6, 10, 21, 0.8);          /* 侧边栏背景 */
+    --bg-header: rgba(6, 10, 21, 0.5);           /* 头部背景 */
+    --bg-input: rgba(6, 27, 130, 0.3);           /* 输入框背景 */
+    --bg-button: rgba(22, 72, 163, 0.8);         /* 按钮背景 */
+    --bg-table-header: rgba(22, 72, 163, 0.4);   /* 表头背景 */
+    --bg-table-row-alt: rgba(255, 255, 255, 0.02); /* 表格斑马纹 */
+    --bg-table-row-hover: rgba(50, 145, 198, 0.2); /* 表格行悬停 */
+    
+    /* ===== 字体 ===== */
+    --font-display: "Space Grotesk", sans-serif;
+    --font-body: "Microsoft YaHei", "Noto Sans SC", Arial, sans-serif;
+    
+    /* ===== 字号层级 ===== */
+    --text-title: 24px;              /* 系统标题 */
+    --text-card-title: 16px;         /* 模块/卡片标题 */
+    --text-card-title-lg: 18px;      /* 大卡片标题 */
+    --text-body: 14px;               /* 正文 */
+    --text-small: 12px;              /* 小标签/辅助文字 */
+    --text-xs: 10px;                 /* 极小文字 */
+    
+    /* ===== 圆角 ===== */
+    --radius-xs: 2px;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-full: 9999px;           /* 圆形 */
+    
+    /* ===== 阴影 ===== */
+    --shadow-card: 0 4px 8px rgba(0, 0, 0, 0.2);
+    --shadow-card-hover: 0 6px 12px rgba(0, 0, 0, 0.3);
+    --shadow-card-float: 0 8px 32px rgba(0, 0, 0, 0.37);
+    --shadow-tech: 0 0 10px rgba(50, 145, 198, 0.3);
+    --shadow-glow: 0 0 15px rgba(22, 72, 163, 0.8);
+    --shadow-focus: 0 0 8px rgba(77, 171, 247, 0.4);
+    
+    /* ===== 状态发光效果 ===== */
+    --glow-normal: 0 0 10px rgba(76, 175, 80, 0.5);
+    --glow-warning: 0 0 10px rgba(255, 193, 7, 0.5);
+    --glow-error: 0 0 10px rgba(244, 67, 54, 0.5);
+    --glow-highlight: 0 0 10px rgba(77, 171, 247, 0.5);
+    
+    /* ===== 过渡动画 ===== */
+    --transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.15s ease;
+    --transition-slow: all 0.5s ease;
+    
+    /* ===== 间距 ===== */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    
+    /* ===== 布局尺寸 ===== */
+    --sidebar-width: 256px;
+    --header-height: 48px;
+    --pagination-size: 32px;
+    
+    /* ===== 网格背景 ===== */
+    --grid-size: 20px;
+    --grid-color: rgba(22, 72, 163, 0.3);
+    --grid-color-light: rgba(50, 145, 198, 0.1);
+}

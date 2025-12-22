@@ -1,0 +1,179 @@
+/**
+ * 数据管理分系统 - 背景样式
+ * 星空背景、网格纹理、轨道动画
+ */
+
+/* ===== 主背景渐变 ===== */
+.space-bg {
+    background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 全屏背景 */
+.space-bg-full {
+    min-height: 100vh;
+}
+
+/* ===== 网格纹理叠加 ===== */
+.grid-overlay {
+    position: fixed;
+    inset: 0;
+    background-image:
+        linear-gradient(var(--grid-color-light) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color-light) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* 更密集的网格（20px） */
+.grid-overlay-dense {
+    background-size: var(--grid-size) var(--grid-size);
+    background-image:
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+}
+
+/* ===== 星星动画层 ===== */
+.stars,
+.stars2,
+.stars3 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    animation: move-twinkle 200s linear infinite;
+    background-image:
+        radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0, 0, 0, 0)),
+        radial-gradient(1px 1px at 40px 70px, #ffffff, rgba(0, 0, 0, 0)),
+        radial-gradient(1px 1px at 50px 160px, #ffffff, rgba(0, 0, 0, 0)),
+        radial-gradient(1px 1px at 90px 40px, #ffffff, rgba(0, 0, 0, 0)),
+        radial-gradient(1px 1px at 130px 80px, #ffffff, rgba(0, 0, 0, 0)),
+        radial-gradient(1.5px 1.5px at 160px 120px, #ffffff, rgba(0, 0, 0, 0));
+    background-repeat: repeat;
+    background-size: 200px 200px;
+    opacity: 0.6;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.stars2 {
+    background-size: 300px 300px;
+    animation-duration: 150s;
+    opacity: 0.4;
+}
+
+.stars3 {
+    background-size: 400px 400px;
+    animation-duration: 100s;
+    opacity: 0.3;
+}
+
+@keyframes move-twinkle {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-1000px);
+    }
+}
+
+
+/* ===== 轨道动画（登录页专用） ===== */
+.orbit-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.orbit {
+    position: absolute;
+    border: 1px dashed rgba(50, 145, 198, 0.3);
+    border-radius: 50%;
+    animation: spin 60s linear infinite;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.orbit-solid {
+    border-style: solid;
+    border-color: rgba(50, 145, 198, 0.15);
+}
+
+.orbit-reverse {
+    animation-direction: reverse;
+}
+
+.orbit-slow {
+    animation-duration: 120s;
+}
+
+.orbit-fast {
+    animation-duration: 30s;
+}
+
+/* 卫星点 */
+.satellite {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: var(--tech-highlight);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--tech-highlight);
+    top: 50%;
+    left: -5px;
+    transform: translateY(-50%);
+}
+
+.satellite-sm {
+    width: 8px;
+    height: 8px;
+    left: -4px;
+}
+
+@keyframes spin {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* ===== 装饰性光晕 ===== */
+.glow-sphere {
+    position: absolute;
+    border-radius: 50%;
+    background: linear-gradient(to bottom, var(--brand-blue), transparent);
+    opacity: 0.1;
+    filter: blur(100px);
+    pointer-events: none;
+}
+
+/* ===== 底部渐变遮罩 ===== */
+.gradient-fade-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 128px;
+    background: linear-gradient(to top, var(--bg-gradient-start), transparent);
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+/* ===== 点阵背景（用于地图等区域） ===== */
+.dot-pattern {
+    background-image: radial-gradient(var(--tech-cyan) 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.2;
+}

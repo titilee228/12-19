@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>站网实时态势监测 - 数据管理分系统</title>
+    
+    <!-- 字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+    
+    <!-- 图标 -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    
+    <!-- Tailwind 主题配置 -->
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "brand-dark": "#061B82",
+                        "brand-blue": "#1648A3",
+                        "tech-cyan": "#3291C6",
+                        "tech-highlight": "#4dabf7",
+                        "status-active": "#4CAF50",
+                        "status-warning": "#FFC107",
+                        "status-error": "#F44336",
+                    },
+                    fontFamily: {
+                        display: ["Space Grotesk", "sans-serif"],
+                        body: ["Microsoft YaHei", "Noto Sans SC", "sans-serif"],
+                    },
+                },
+            },
+        };
+    </script>
+    
+    <!-- 公共样式 -->
+    <link rel="stylesheet" href="../common/index.css">
+    
+    <style>
+        body {
+            font-family: var(--font-body);
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+
+<body class="space-bg overflow-hidden flex h-screen">
+    <!-- 背景层 -->
+    <div class="stars"></div>
+    <div class="stars2"></div>
+    <div class="stars3"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- 侧边导航栏 -->
+    <aside class="tech-sidebar">
+        <div class="tech-sidebar-header">
+            <i class="ph ph-tree-structure text-2xl mr-3 text-tech-highlight"></i>
+            <span class="text-lg font-bold tracking-wider font-display">站网管理系统</span>
+        </div>
+        
+        <nav class="tech-sidebar-nav">
+            <div class="tech-nav-group">
+                <button class="tech-nav-parent expanded">
+                    <div class="tech-nav-parent-content">
+                        <i class="ph ph-monitor tech-nav-parent-icon"></i>
+                        <span class="font-medium">站网态势监测</span>
+                    </div>
+                    <i class="ph ph-caret-up tech-nav-parent-arrow"></i>
+                </button>
+                <div class="tech-nav-children">
+                    <a class="tech-nav-item active" href="#">站网实时态势监测</a>
+                    <a class="tech-nav-item" href="#">地面站态势监测</a>
+                    <a class="tech-nav-item" href="#">历史状态统计</a>
+                </div>
+            </div>
+            
+            <div class="tech-nav-group" style="margin-top: 16px;">
+                <button class="tech-nav-parent">
+                    <div class="tech-nav-parent-content">
+                        <i class="ph ph-sliders-horizontal tech-nav-parent-icon"></i>
+                        <span class="font-medium">远程控制</span>
+                    </div>
+                    <i class="ph ph-caret-down tech-nav-parent-arrow"></i>
+                </button>
+            </div>
+        </nav>
+        
+        <div class="tech-sidebar-footer">
+            <div class="tech-sidebar-status">
+                <span class="status-dot status-dot-normal status-dot-pulse"></span>
+                系统运行正常
+            </div>
+        </div>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="tech-layout-main">
+        <!-- 头部 -->
+        <header class="tech-header">
+            <div class="tech-header-left">
+                <div class="tech-breadcrumb">
+                    <span class="tech-breadcrumb-item">站网管理</span>
+                    <i class="ph ph-caret-right tech-breadcrumb-separator"></i>
+                    <span class="tech-breadcrumb-item">站网态势监测</span>
+                    <i class="ph ph-caret-right tech-breadcrumb-separator"></i>
+                    <span class="tech-breadcrumb-item current">站网实时态势监测</span>
+                </div>
+            </div>
+            <div class="tech-header-right">
+                <button class="tech-header-action"><i class="ph ph-bell text-lg"></i></button>
+                <button class="tech-header-action"><i class="ph ph-house text-lg"></i></button>
+                <button class="tech-header-action"><i class="ph ph-user-circle text-lg"></i></button>
+            </div>
+        </header>
+
+        <!-- 内容区 -->
+        <div class="tech-layout-content" style="display: flex; flex-direction: column; gap: 24px;">
+            
+            <!-- 统计卡片行 -->
+            <div class="tech-stat-grid">
+                <!-- 站点总数 -->
+                <div class="tech-stat-card">
+                    <div class="tech-stat-header">
+                        <div class="tech-stat-title" style="color: var(--tech-highlight);">
+                            <i class="ph ph-buildings tech-stat-title-icon"></i>
+                            <span>站点总数</span>
+                        </div>
+                        <span class="tech-badge">TOTAL</span>
+                    </div>
+                    <div class="tech-stat-value">1,234</div>
+                    <div class="tech-stat-footer">
+                        <div class="tech-stat-item">
+                            <div class="tech-stat-item-label">中国移动</div>
+                            <div class="tech-stat-item-value" style="color: var(--tech-highlight);">1,234</div>
+                        </div>
+                        <div class="tech-stat-item" style="border-left: 1px solid rgba(255,255,255,0.05); border-right: 1px solid rgba(255,255,255,0.05);">
+                            <div class="tech-stat-item-label">国家北斗</div>
+                            <div class="tech-stat-item-value" style="color: var(--tech-highlight);">1,234</div>
+                        </div>
+                        <div class="tech-stat-item">
+                            <div class="tech-stat-item-label">自然资源</div>
+                            <div class="tech-stat-item-value" style="color: var(--tech-highlight);">1,234</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 正常站点 -->
+                <div class="tech-stat-card">
+                    <div class="tech-stat-header">
+                        <div class="tech-stat-title" style="color: var(--status-normal);">
+                            <i class="ph ph-check-circle tech-stat-title-icon"></i>
+                            <span>正常站点</span>
+                        </div>
+                        <span class="status-dot status-dot-normal status-dot-pulse"></span>
+                    </div>
+                    <div class="tech-stat-value">1,234</div>
+                    <div class="tech-stat-footer">
+                        <div class="tech-stat-item">
+                            <div class="tech-stat-item-label">中国移动</div>
+                            <div class="tech-stat-item-value" style="color: var(--status-normal);">1,234</div>
+                        </div>
+                        <div class="tech-stat-item" style="border-left: 1px solid rgba(255,255,255,0.05); border-right: 1px solid rgba(255,255,255,0.05);">
+                            <div class="tech-stat-item-label">国家北斗</div>
+                            <div class="tech-stat-item-value" style="color: var(--status-normal);">1,234</div>
+                        </div>
+                        <div class="tech-stat-item">
+                            <div class="tech-stat-item-label">自然资源</div>
+                            <div class="tech-stat-item-value" style="color: var(--status-normal);">1,234</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 异常站点 -->
+                <div class="tech-stat-card">
+                    <div class="tech-stat-header">
+                        <div class="tech-stat-title" style="color: var(--status-error);">
+                            <i class="ph ph-warning-octagon tech-stat-title-icon"></i>
+                            <span>异常站点</span>
+                        </div>
+                        <span class="status-dot status-dot-error status-dot-blink"></span>
+                    </div>
+                    <div class="tech-stat-value">1,234</div>
+                    <div class="tech-stat-footer">
+                        <div class="tech-stat-item">
+                            <div class="tech-stat-item-label">中国移动</div>
+                            <div class="tech-stat-item-value" style="color: var(--status-error);">1,234</div>
+                        </div>
+                        <div class="tech-stat-item" style="border-left: 1px solid rgba(255,255,255,0.05); border-right: 1px solid rgba(255,255,255,0.05);">
+                            <div class="tech-stat-item-label">国家北斗</div>
+                            <div class="tech-stat-item-value" style="color: var(--status-error);">1,234</div>
+                        </div>
+                        <div class="tech-stat-item">
+                            <div class="tech-stat-item-label">自然资源</div>
+                            <div class="tech-stat-item-value" style="color: var(--status-error);">1,234</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 地图和图表区域 -->
+            <div class="tech-dashboard-grid tech-dashboard-grid-main" style="flex: 1; min-height: 500px;">
+                <!-- 左侧地图 -->
+                <div class="tech-card" style="padding: 4px; display: flex; flex-direction: column; position: relative;">
+                    <!-- 地图图例 -->
+                    <div style="position: absolute; top: 16px; left: 16px; z-index: 10;">
+                        <div class="tech-card" style="padding: 8px 12px; backdrop-filter: blur(12px); margin-bottom: 8px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <i class="ph ph-map-pin" style="color: var(--tech-cyan);"></i>
+                                <span style="font-weight: 500; color: var(--text-primary);">站点分布</span>
+                            </div>
+                        </div>
+                        <div class="tech-card" style="padding: 12px; backdrop-filter: blur(12px);">
+                            <div style="display: flex; flex-direction: column; gap: 6px; font-size: 12px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span class="status-dot status-dot-normal"></span>
+                                    <span style="color: var(--text-secondary);">正常</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span class="status-dot status-dot-error"></span>
+                                    <span style="color: var(--text-secondary);">异常</span>
+                                </div>
+                                <div class="tech-divider" style="margin: 4px 0;"></div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="width: 8px; height: 8px; border-radius: 50%; background: #9ca3af;"></span>
+                                    <span style="color: var(--text-muted); font-size: 10px;">中国移动基准站</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="width: 8px; height: 8px; border-radius: 50%; background: #eab308;"></span>
+                                    <span style="color: var(--text-muted); font-size: 10px;">国家北斗监测站</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <span style="width: 8px; height: 8px; border-radius: 50%; background: #93c5fd;"></span>
+                                    <span style="color: var(--text-muted); font-size: 10px;">自然资源部基准站</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 地图区域 -->
+                    <div style="flex: 1; background: rgba(6, 10, 21, 0.4); border-radius: 6px; position: relative; overflow: hidden;">
+                        <!-- 网格背景 -->
+                        <div style="position: absolute; inset: 0; opacity: 0.3; background-image: linear-gradient(rgba(100, 116, 139, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(100, 116, 139, 0.3) 1px, transparent 1px); background-size: 40px 40px;"></div>
+                        
+                        <!-- 中国地图 -->
+                        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 32px;">
+                            <img alt="Map of China" style="width: 100%; height: 100%; object-fit: contain; filter: invert(1) sepia(1) saturate(2) hue-rotate(180deg); opacity: 0.6;" 
+                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHMddSCqIG-FSjozla7P2PCleSj8EtHAfj29qZumGXVDbaWZE0jTLtxWC8SpZfs8SPZgTgIOb_KZFxD8NXz91lUNA8Si54jUiMwA2xceyGiIectQfqT4n7jgM_TgzVVaAmqQEtF3PQQfOK_mtWTlS-F_bookNoW3bJnt0EQpXqtE61OvCqDtazXNuS2qBdADgLVp2fx7OLUO7XIgSE_0fDvam1nY2Kd9uefV-9D-gBp4DZGiheVY1skMk3oe2o3iiLPapuMQ9z7pY"/>
+                        </div>
+
+                        <!-- 站点标记 - 正常 -->
+                        <div style="position: absolute; top: 33%; left: 50%; width: 8px; height: 8px; background: var(--status-normal); border-radius: 50%; box-shadow: 0 0 8px 2px rgba(76, 175, 80, 0.6);"></div>
+                        <div style="position: absolute; top: 25%; left: 33%; width: 8px; height: 8px; background: var(--status-normal); border-radius: 50%; box-shadow: 0 0 8px 2px rgba(76, 175, 80, 0.6);"></div>
+                        <div style="position: absolute; bottom: 33%; right: 25%; width: 8px; height: 8px; background: var(--status-normal); border-radius: 50%; box-shadow: 0 0 8px 2px rgba(76, 175, 80, 0.6);"></div>
+                        <div style="position: absolute; top: 50%; left: 50%; width: 8px; height: 8px; background: var(--status-normal); border-radius: 50%; box-shadow: 0 0 8px 2px rgba(76, 175, 80, 0.6);"></div>
+                        <div style="position: absolute; bottom: 25%; left: 33%; width: 6px; height: 6px; background: #86efac; border-radius: 50%;"></div>
+                        <div style="position: absolute; top: 33%; right: 33%; width: 6px; height: 6px; background: #86efac; border-radius: 50%;"></div>
+                        
+                        <!-- 站点标记 - 异常 -->
+                        <div style="position: absolute; top: 50%; right: 33%;">
+                            <div style="width: 12px; height: 12px; background: var(--status-error); border-radius: 50%; box-shadow: 0 0 10px 3px rgba(244, 67, 54, 0.8); position: relative;">
+                                <div class="status-dot-blink" style="position: absolute; inset: 0; border-radius: 50%; border: 1px solid var(--status-error);"></div>
+                            </div>
+                        </div>
+                        <div style="position: absolute; bottom: 25%; right: 50%;">
+                            <div style="width: 12px; height: 12px; background: var(--status-error); border-radius: 50%; box-shadow: 0 0 10px 3px rgba(244, 67, 54, 0.8); position: relative;">
+                                <div class="status-dot-blink" style="position: absolute; inset: 0; border-radius: 50%; border: 1px solid var(--status-error);"></div>
+                            </div>
+                        </div>
+
+                        <!-- 缩略图 -->
+                        <div style="position: absolute; bottom: 32px; right: 32px; width: 128px; height: 128px; border: 1px solid var(--tech-cyan); opacity: 0.5; padding: 4px;">
+                            <div style="width: 100%; height: 100%; background: rgba(50, 145, 198, 0.1); position: relative;">
+                                <div style="position: absolute; top: 8px; left: 16px; width: 4px; height: 4px; background: white; border-radius: 50%;"></div>
+                                <div style="position: absolute; bottom: 32px; right: 16px; width: 4px; height: 4px; background: white; border-radius: 50%;"></div>
+                                <span style="position: absolute; bottom: 4px; right: 4px; font-size: 10px; color: var(--tech-cyan);">ZOOM VIEW</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右侧图表 -->
+                <div style="display: flex; flex-direction: column; gap: 24px;">
+                    <!-- 中国移动基准站 -->
+                    <div class="tech-card" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px;">
+                        <h4 style="font-size: 12px; font-weight: 600; color: var(--tech-cyan); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; text-align: center;">
+                            中国移动基准站站点状态统计
+                        </h4>
+                        <div class="tech-ring-chart" style="width: 128px; height: 128px;">
+                            <svg style="width: 100%; height: 100%;">
+                                <circle class="tech-ring-track" cx="64" cy="64" r="56" stroke-width="8"></circle>
+                                <circle class="tech-ring-progress" cx="64" cy="64" r="56" stroke-width="8" 
+                                        stroke-dasharray="351" stroke-dashoffset="35" style="stroke: #3b82f6;"></circle>
+                            </svg>
+                            <div class="tech-ring-center">
+                                <span class="tech-ring-value">90%</span>
+                                <span class="tech-ring-label">正常</span>
+                            </div>
+                        </div>
+                        <div style="width: 100%; display: flex; justify-content: space-between; font-size: 12px; margin-top: 16px; padding: 0 16px;">
+                            <div style="display: flex; align-items: center; gap: 4px;">
+                                <span style="width: 8px; height: 8px; border-radius: 2px; background: #3b82f6;"></span>
+                                <span style="color: var(--text-muted);">正常</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 4px;">
+                                <span style="width: 8px; height: 8px; border-radius: 2px; background: rgba(255,255,255,0.1);"></span>
+                                <span style="color: var(--text-muted);">异常</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 国家北斗监测站 -->
+                    <div class="tech-card" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px;">
+                        <h4 style="font-size: 12px; font-weight: 600; color: var(--tech-cyan); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; text-align: center;">
+                            国家北斗地基增强监测站
+                        </h4>
+                        <div class="tech-ring-chart" style="width: 128px; height: 128px;">
+                            <svg style="width: 100%; height: 100%;">
+                                <circle class="tech-ring-track" cx="64" cy="64" r="56" stroke-width="8"></circle>
+                                <circle class="tech-ring-progress" cx="64" cy="64" r="56" stroke-width="8" 
+                                        stroke-dasharray="351" stroke-dashoffset="100" style="stroke: #6366f1;"></circle>
+                            </svg>
+                            <div class="tech-ring-center">
+                                <span class="tech-ring-value">72%</span>
+                                <span class="tech-ring-label">正常</span>
+                            </div>
+                        </div>
+                        <div style="width: 100%; display: flex; justify-content: space-between; font-size: 12px; margin-top: 16px; padding: 0 16px;">
+                            <div style="display: flex; align-items: center; gap: 4px;">
+                                <span style="width: 8px; height: 8px; border-radius: 2px; background: #6366f1;"></span>
+                                <span style="color: var(--text-muted);">正常</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 4px;">
+                                <span style="width: 8px; height: 8px; border-radius: 2px; background: rgba(255,255,255,0.1);"></span>
+                                <span style="color: var(--text-muted);">异常</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 自然资源部基准站 -->
+                    <div class="tech-card" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px;">
+                        <h4 style="font-size: 12px; font-weight: 600; color: var(--tech-cyan); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; text-align: center;">
+                            自然资源部基准站
+                        </h4>
+                        <div class="tech-ring-chart" style="width: 128px; height: 128px;">
+                            <svg style="width: 100%; height: 100%;">
+                                <circle class="tech-ring-track" cx="64" cy="64" r="56" stroke-width="8"></circle>
+                                <circle class="tech-ring-progress" cx="64" cy="64" r="56" stroke-width="8" 
+                                        stroke-dasharray="351" stroke-dashoffset="60" style="stroke: #a855f7;"></circle>
+                            </svg>
+                            <div class="tech-ring-center">
+                                <span class="tech-ring-value" style="color: #a855f7;">83%</span>
+                                <span class="tech-ring-label">正常</span>
+                            </div>
+                        </div>
+                        <div style="width: 100%; display: flex; justify-content: space-between; font-size: 12px; margin-top: 16px; padding: 0 16px;">
+                            <div style="display: flex; align-items: center; gap: 4px;">
+                                <span style="width: 8px; height: 8px; border-radius: 2px; background: #a855f7;"></span>
+                                <span style="color: var(--text-muted);">正常</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 4px;">
+                                <span style="width: 8px; height: 8px; border-radius: 2px; background: rgba(255,255,255,0.1);"></span>
+                                <span style="color: var(--text-muted);">异常</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
