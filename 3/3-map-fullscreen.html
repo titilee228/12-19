@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>站点分布地图 - 全屏模式</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="../common/index.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: "Microsoft YaHei", "Noto Sans SC", sans-serif; 
+            color: #ffffff; 
+            background: linear-gradient(135deg, #000B30 0%, #061B82 100%);
+            height: 100vh;
+            overflow: hidden;
+        }
+        .grid-overlay {
+            position: fixed;
+            inset: 0;
+            background-image: linear-gradient(rgba(50, 145, 198, 0.1) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(50, 145, 198, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .stars {
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(1px 1px at 20px 30px, #fff, transparent),
+                              radial-gradient(1px 1px at 40px 70px, rgba(255,255,255,0.8), transparent),
+                              radial-gradient(1px 1px at 50px 160px, rgba(255,255,255,0.6), transparent);
+            background-size: 200px 200px;
+            animation: twinkle 200s linear infinite;
+            opacity: 0.4;
+            z-index: 0;
+        }
+        @keyframes twinkle { from { transform: translateY(0); } to { transform: translateY(-1000px); } }
+        
+        .map-container {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+        }
+        #fullscreen-map {
+            width: 100%;
+            height: 100%;
+        }
+        /* 图例面板 */
+        .legend-panel {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            background: rgba(6, 27, 130, 0.85);
+            border: 1px solid rgba(50, 145, 198, 0.5);
+            border-radius: 8px;
+            padding: 16px 20px;
+            backdrop-filter: blur(12px);
+        }
+        .legend-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #3291C6, transparent);
+        }
+        .legend-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(50, 145, 198, 0.3);
+        }
+</style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="grid-overlay"></div>
+    
+    <!-- 全屏地图容器 -->
+    <div class="map-container">
+        <div id="fullscreen-map"></div>
+    </div>
+
+    <!-- 图例面板 -->
+    <div class="legend-panel">
+        <div class="legend-title">
+            <i class="ph ph-map-pin" style="font-size: 20px; color: #3291C6;"></i>
+            <span style="font-size: 16px; font-weight: 600; color: #ffffff;">站点分布</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="width: 10px; height: 10px; border-radius: 50%; background: #4CAF50; box-shadow: 0 0 8px #4CAF50;"></span>
+                <span style="color: rgba(255,255,255,0.8);">正常</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="width: 10px; height: 10px; border-radius: 50%; background: #F44336; box-shadow: 0 0 8px #F44336;"></span>
+                <span style="color: rgba(255,255,255,0.8);">异常</span>
+            </div>
+            <div style="height: 1px; background: rgba(50, 145, 198, 0.3); margin: 6px 0;"></div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="width: 10px; height: 10px; border-radius: 50%; background: #64748b;"></span>
+                <span style="color: rgba(255,255,255,0.6); font-size: 12px;">中国移动基准站</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="width: 10px; height: 10px; border-radius: 50%; background: #eab308;"></span>
+                <span style="color: rgba(255,255,255,0.6); font-size: 12px;">国家北斗地基增强监测站</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="width: 10px; height: 10px; border-radius: 50%; background: #3b82f6;"></span>
+                <span style="color: rgba(255,255,255,0.6); font-size: 12px;">自然资源部基准站</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 还原按钮 -->
+    <a href="3.html" style="position: fixed; top: 20px; right: 20px; z-index: 100; width: 44px; height: 44px; background: rgba(6, 27, 130, 0.85); border: 1px solid rgba(50, 145, 198, 0.5); border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; text-decoration: none; backdrop-filter: blur(12px);" title="返回">
+        <i class="ph ph-arrows-in" style="font-size: 22px; color: #4dabf7;"></i>
+    </a>
+
+    <!-- 标题栏 -->
+    <div style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 100; background: rgba(6, 27, 130, 0.85); border: 1px solid rgba(50, 145, 198, 0.5); border-radius: 8px; padding: 12px 24px; backdrop-filter: blur(12px); display: flex; align-items: center; gap: 12px;">
+        <i class="ph ph-globe-hemisphere-west" style="font-size: 24px; color: #4dabf7;"></i>
+        <span style="font-size: 18px; font-weight: 600; color: #ffffff; letter-spacing: 1px;">全国站点分布态势图</span>
+    </div>
+
+    <!-- 加载动画 -->
+    <div id="map-loader" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 200; text-align: center;">
+        <div style="width: 40px; height: 40px; border: 3px solid rgba(50, 145, 198, 0.2); border-top-color: #4dabf7; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 12px;"></div>
+        <div style="font-size: 14px; color: #4dabf7;">正在加载地图数据...</div>
+    </div>
+    <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+
+    <script>
+        // 初始化ECharts
+        const mapChart = echarts.init(document.getElementById('fullscreen-map'));
+        const mapLoader = document.getElementById('map-loader');
+
+        // 中国地图数据源
+        const CHINA_GEO_JSON_URL = 'https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json';
+
+        // 站点数据
+        const normalStations = [
+            { name: '北京中心站', value: [116.40, 39.90, 100] },
+            { name: '上海监测站', value: [121.47, 31.23, 90] },
+            { name: '广州基准站', value: [113.26, 23.13, 85] },
+            { name: '深圳接收站', value: [114.06, 22.54, 80] },
+            { name: '成都中继站', value: [104.07, 30.67, 75] },
+            { name: '武汉数据站', value: [114.30, 30.60, 70] },
+            { name: '西安控制站', value: [108.95, 34.27, 95] },
+            { name: '南京监控站', value: [118.78, 32.06, 65] },
+            { name: '杭州基站', value: [120.15, 30.28, 60] },
+            { name: '重庆节点', value: [106.55, 29.56, 55] },
+            { name: '天津站', value: [117.20, 39.13, 50] },
+            { name: '沈阳站', value: [123.43, 41.80, 45] },
+            { name: '哈尔滨站', value: [126.63, 45.75, 40] },
+            { name: '长春站', value: [125.32, 43.90, 35] },
+            { name: '济南站', value: [117.00, 36.67, 30] },
+            { name: '郑州站', value: [113.65, 34.76, 25] },
+            { name: '长沙站', value: [112.98, 28.21, 20] },
+            { name: '福州站', value: [119.30, 26.08, 15] },
+            { name: '南昌站', value: [115.89, 28.68, 10] },
+            { name: '合肥站', value: [117.28, 31.86, 5] },
+        ];
+
+        const errorStations = [
+            { name: '乌鲁木齐异常', value: [87.61, 43.82, 10] },
+            { name: '拉萨告警', value: [91.11, 29.65, 8] },
+            { name: '昆明异常', value: [102.71, 25.04, 6] },
+        ];
+
+        const mobileStations = [
+            { name: '移动-石家庄', value: [114.48, 38.03, 30] },
+            { name: '移动-太原', value: [112.55, 37.87, 25] },
+            { name: '移动-呼和浩特', value: [111.75, 40.84, 20] },
+            { name: '移动-银川', value: [106.27, 38.47, 15] },
+            { name: '移动-兰州', value: [103.82, 36.06, 10] },
+        ];
+
+        const beidouStations = [
+            { name: '北斗-西宁', value: [101.78, 36.62, 30] },
+            { name: '北斗-贵阳', value: [106.71, 26.57, 25] },
+            { name: '北斗-南宁', value: [108.37, 22.82, 20] },
+            { name: '北斗-海口', value: [110.35, 20.02, 15] },
+            { name: '北斗-三亚', value: [109.51, 18.25, 10] },
+        ];
+
+        const resourceStations = [
+            { name: '资源-台北', value: [121.50, 25.03, 30] },
+            { name: '资源-厦门', value: [118.09, 24.48, 25] },
+            { name: '资源-宁波', value: [121.55, 29.87, 20] },
+            { name: '资源-青岛', value: [120.38, 36.07, 15] },
+            { name: '资源-大连', value: [121.62, 38.91, 10] },
+        ];
+
+        async function initMap() {
+            try {
+                const response = await fetch(CHINA_GEO_JSON_URL);
+                const chinaJson = await response.json();
+                mapLoader.style.display = 'none';
+
+                echarts.registerMap('china', chinaJson);
+
+                const option = {
+                    backgroundColor: 'transparent',
+                    tooltip: {
+                        trigger: 'item',
+                        backgroundColor: 'rgba(6, 27, 130, 0.95)',
+                        borderColor: '#3291C6',
+                        borderWidth: 1,
+                        textStyle: { color: '#fff', fontSize: 13 },
+                        formatter: function(params) {
+                            if (params.seriesType === 'effectScatter' || params.seriesType === 'scatter') {
+                                return `<div style="padding:5px"><b style="color:#4dabf7;font-size:14px;">${params.name}</b></div>`;
+                            }
+                            return `<div style="padding:5px"><b style="color:#4dabf7;font-size:14px;">${params.name}</b><br/><span style="color:#94a3b8;">站点数量: ${Math.floor(Math.random()*100+20)}</span></div>`;
+                        }
+                    },
+                    geo: {
+                        map: 'china',
+                        roam: true,
+                        zoom: 1.2,
+                        center: [105, 36],
+                        label: { show: true, color: 'rgba(255, 255, 255, 0.4)', fontSize: 11 },
+                        itemStyle: {
+                            areaColor: 'rgba(6, 27, 130, 0.5)',
+                            borderColor: '#3291C6',
+                            borderWidth: 1.5,
+                            shadowColor: 'rgba(50, 145, 198, 0.4)',
+                            shadowBlur: 15
+                        },
+                        emphasis: {
+                            itemStyle: {
+                                areaColor: 'rgba(77, 171, 247, 0.5)',
+                                borderColor: '#4dabf7',
+                                borderWidth: 2
+                            },
+                            label: { show: true, color: '#fff', fontSize: 12, fontWeight: 'bold' }
+                        }
+                    },
+                    series: [
+                        {
+                            name: '正常站点',
+                            type: 'effectScatter',
+                            coordinateSystem: 'geo',
+                            data: normalStations,
+                            symbolSize: 8,
+                            showEffectOn: 'render',
+                            rippleEffect: { brushType: 'stroke', scale: 4, period: 4 },
+                            itemStyle: { color: '#4CAF50', shadowBlur: 10, shadowColor: '#4CAF50' },
+                            zlevel: 2
+                        },
+                        {
+                            name: '异常站点',
+                            type: 'effectScatter',
+                            coordinateSystem: 'geo',
+                            data: errorStations,
+                            symbolSize: 10,
+                            showEffectOn: 'render',
+                            rippleEffect: { brushType: 'stroke', scale: 5, period: 2 },
+                            itemStyle: { color: '#F44336', shadowBlur: 12, shadowColor: '#F44336' },
+                            zlevel: 3
+                        },
+                        {
+                            name: '中国移动基准站',
+                            type: 'scatter',
+                            coordinateSystem: 'geo',
+                            data: mobileStations,
+                            symbolSize: 7,
+                            itemStyle: { color: '#64748b', borderColor: '#94a3b8', borderWidth: 1 },
+                            zlevel: 1
+                        },
+                        {
+                            name: '国家北斗监测站',
+                            type: 'scatter',
+                            coordinateSystem: 'geo',
+                            data: beidouStations,
+                            symbolSize: 7,
+                            itemStyle: { color: '#eab308', borderColor: '#fbbf24', borderWidth: 1 },
+                            zlevel: 1
+                        },
+                        {
+                            name: '自然资源部基准站',
+                            type: 'scatter',
+                            coordinateSystem: 'geo',
+                            data: resourceStations,
+                            symbolSize: 7,
+                            itemStyle: { color: '#3b82f6', borderColor: '#60a5fa', borderWidth: 1 },
+                            zlevel: 1
+                        }
+                    ]
+                };
+
+                mapChart.setOption(option);
+            } catch (error) {
+                console.error('地图加载失败:', error);
+                mapLoader.innerHTML = '<div style="color:#F44336;font-size:14px;">地图数据加载失败</div>';
+            }
+        }
+
+        window.addEventListener('resize', () => mapChart.resize());
+        initMap();
+    </script>
+</body>
+</html>
