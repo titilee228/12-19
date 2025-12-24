@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>User Status Dashboard - China Spatiotemporal Platform</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#1e88e5", // Bright Blue
+                        secondary: "#00bcd4", // Cyan
+                        "background-light": "#f3f4f6",
+                        "background-dark": "#050b16",
+                        "panel-light": "#ffffff",
+                        "panel-dark": "#0b1221",
+                        "border-light": "#e5e7eb",
+                        "border-dark": "#1e3a8a",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                        mono: ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace"],
+                    },
+                    boxShadow: {
+                        'glow': '0 0 15px rgba(30, 136, 229, 0.3)',
+                    }
+                },
+            },
+        };
+    </script>
+<style>::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e3a8a; 
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3b82f6; 
+        }.tech-card {
+            position: relative;
+        }
+        .tech-card::before, .tech-card::after {
+            content: "";
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-color: #3b82f6;border-style: solid;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }.tech-card::before {
+            top: -1px;
+            left: -1px;
+            border-width: 2px 0 0 2px;
+        }.tech-card::after {
+            bottom: -1px;
+            right: -1px;
+            border-width: 0 2px 2px 0;
+        }.grid-bg {
+            background-size: 40px 40px;
+            background-image:
+                linear-gradient(to right, rgba(30, 58, 138, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(30, 58, 138, 0.1) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-gray-800 dark:text-gray-100 font-display transition-colors duration-300 flex flex-col h-screen overflow-hidden">
+<header class="h-16 flex-none bg-panel-light dark:bg-[#081020] border-b border-border-light dark:border-blue-900/50 flex items-center justify-between px-6 z-20 shadow-sm relative">
+<div class="flex items-center space-x-4">
+<div class="text-primary text-2xl">
+<i class="fa-solid fa-satellite-dish"></i>
+</div>
+<h1 class="text-xl font-bold tracking-wide text-gray-900 dark:text-white">
+                中国时空高精度定位综合服务平台
+                <span class="text-xs font-normal text-gray-500 dark:text-gray-400 ml-2 hidden sm:inline-block">SPATIOTEMPORAL HIGH-PRECISION POSITIONING SERVICE</span>
+</h1>
+</div>
+<div class="flex items-center space-x-6">
+<button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-blue-900/30 text-gray-500 dark:text-blue-300 transition" onclick="document.documentElement.classList.toggle('dark')">
+<i class="fa-solid fa-circle-half-stroke"></i>
+</button>
+<div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-300 cursor-pointer hover:text-primary">
+<i class="fa-solid fa-user-astronaut"></i>
+<span>Admin</span>
+</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<aside class="w-64 flex-none bg-white dark:bg-[#060e1a] border-r border-border-light dark:border-blue-900/30 flex flex-col hidden md:flex">
+<div class="flex flex-col py-4 space-y-1">
+<div class="px-6 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Dashboard</div>
+<a class="flex items-center px-6 py-3 bg-blue-50 dark:bg-blue-900/20 text-primary border-r-4 border-primary" href="#">
+<i class="fa-solid fa-chart-line w-6"></i>
+<span class="font-medium">用户态势 (Status)</span>
+</a>
+<a class="flex items-center px-6 py-3 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-blue-900/10 hover:text-primary transition-colors" href="#">
+<i class="fa-solid fa-network-wired w-6"></i>
+<span>产品接入 (Access)</span>
+<i class="fa-solid fa-chevron-down ml-auto text-xs opacity-50"></i>
+</a>
+<a class="flex items-center px-6 py-3 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-blue-900/10 hover:text-primary transition-colors" href="#">
+<i class="fa-solid fa-users-gear w-6"></i>
+<span>用户管理 (Users)</span>
+</a>
+<a class="flex items-center px-6 py-3 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-blue-900/10 hover:text-primary transition-colors" href="#">
+<i class="fa-solid fa-tower-broadcast w-6"></i>
+<span>播放监控 (Broadcast)</span>
+</a>
+<a class="flex items-center px-6 py-3 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-blue-900/10 hover:text-primary transition-colors" href="#">
+<i class="fa-solid fa-server w-6"></i>
+<span>运行监控 (Ops)</span>
+<i class="fa-solid fa-chevron-down ml-auto text-xs opacity-50"></i>
+</a>
+<a class="flex items-center px-6 py-3 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-blue-900/10 hover:text-primary transition-colors" href="#">
+<i class="fa-solid fa-headset w-6"></i>
+<span>服务监控 (Service)</span>
+<i class="fa-solid fa-chevron-down ml-auto text-xs opacity-50"></i>
+</a>
+<a class="flex items-center px-6 py-3 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-blue-900/10 hover:text-primary transition-colors" href="#">
+<i class="fa-solid fa-gears w-6"></i>
+<span>系统管理 (System)</span>
+</a>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto p-4 relative">
+<div class="mb-4 flex items-center text-sm text-gray-500 dark:text-gray-400">
+<span class="mr-2">I 中国时空高精度定位综合服务平台</span>
+<span class="mx-2">/</span>
+<span class="text-gray-800 dark:text-white font-medium">用户态势</span>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-4 pb-4">
+<div class="col-span-1 flex flex-col gap-4">
+<div class="tech-card bg-panel-light dark:bg-panel-dark border border-border-light dark:border-border-dark shadow-sm dark:shadow-glow p-3 rounded-sm h-[250px] flex flex-col">
+<h3 class="text-sm font-semibold text-primary mb-3 border-l-2 border-primary pl-2 flex items-center">
+<i class="fa-regular fa-folder-open mr-2"></i>产品接入状态
+                        </h3>
+<div class="flex-1 overflow-auto text-xs">
+<table class="w-full text-left">
+<thead class="bg-gray-100 dark:bg-blue-900/20 text-gray-600 dark:text-blue-300 sticky top-0">
+<tr>
+<th class="p-2 font-medium">接入来源</th>
+<th class="p-2 font-medium">所属单位</th>
+<th class="p-2 font-medium">协议</th>
+<th class="p-2 font-medium">状态</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100 dark:divide-blue-900/30 text-gray-700 dark:text-gray-300">
+<tr class="dark:even:bg-white/5 even:bg-gray-50">
+<td class="p-2">一级播发</td>
+<td class="p-2">中国时空</td>
+<td class="p-2">TCP</td>
+<td class="p-2 text-green-500">启用</td>
+</tr>
+<tr class="dark:even:bg-white/5 even:bg-gray-50">
+<td class="p-2">二级播发</td>
+<td class="p-2">卫通集团</td>
+<td class="p-2">UDP</td>
+<td class="p-2 text-green-500">启用</td>
+</tr>
+<tr class="dark:even:bg-white/5 even:bg-gray-50">
+<td class="p-2">三级播发</td>
+<td class="p-2">北斗星通</td>
+<td class="p-2">TCP</td>
+<td class="p-2 text-red-500">停用</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="tech-card bg-panel-light dark:bg-panel-dark border border-border-light dark:border-border-dark shadow-sm dark:shadow-glow p-3 rounded-sm h-[200px] flex flex-col">
+<h3 class="text-sm font-semibold text-primary mb-2 border-l-2 border-primary pl-2">产品接收频率(包/秒)</h3>
+<div class="flex-1 relative w-full h-full bg-gray-50 dark:bg-black/20 rounded border border-dashed border-gray-300 dark:border-gray-700 flex items-center justify-center overflow-hidden">
+<svg class="w-full h-full absolute bottom-0 left-0 px-2 pb-6 text-secondary" preserveAspectRatio="none" viewBox="0 0 300 100">
+<path d="M0,80 Q20,75 40,82 T80,78 T120,60 T160,75 T200,65 T240,70 T300,50" fill="none" stroke="currentColor" stroke-width="2"></path>
+<path d="M0,80 Q20,75 40,82 T80,78 T120,60 T160,75 T200,65 T240,70 T300,50 V100 H0 Z" fill="url(#grad1)" opacity="0.2"></path>
+<defs>
+<linearGradient id="grad1" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:currentColor;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:currentColor;stop-opacity:0"></stop>
+</linearGradient>
+</defs>
+</svg>
+<div class="absolute inset-0 grid grid-rows-4 divide-y divide-gray-200 dark:divide-gray-800 pointer-events-none">
+<div></div><div></div><div></div><div></div>
+</div>
+<div class="absolute bottom-1 left-2 text-[10px] text-gray-400 font-mono">25-12-10 12:20:13</div>
+<div class="absolute bottom-1 right-2 text-[10px] text-gray-400 font-mono">2025-12-10 13:39:53</div>
+</div>
+</div>
+<div class="tech-card bg-panel-light dark:bg-panel-dark border border-border-light dark:border-border-dark shadow-sm dark:shadow-glow p-3 rounded-sm h-[200px] flex flex-col">
+<h3 class="text-sm font-semibold text-primary mb-2 border-l-2 border-primary pl-2">产品播发频率(包/秒)</h3>
+<div class="flex-1 relative w-full h-full bg-gray-50 dark:bg-black/20 rounded border border-dashed border-gray-300 dark:border-gray-700 flex items-center justify-center overflow-hidden">
+<svg class="w-full h-full absolute bottom-0 left-0 px-2 pb-6 text-primary" preserveAspectRatio="none" viewBox="0 0 300 100">
+<path d="M0,70 Q30,65 60,70 T120,65 T180,68 T240,62 T300,65" fill="none" stroke="currentColor" stroke-width="2"></path>
+<path d="M0,70 Q30,65 60,70 T120,65 T180,68 T240,62 T300,65 V100 H0 Z" fill="url(#grad2)" opacity="0.2"></path>
+<defs>
+<linearGradient id="grad2" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:currentColor;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:currentColor;stop-opacity:0"></stop>
+</linearGradient>
+</defs>
+</svg>
+<div class="absolute inset-0 grid grid-rows-4 divide-y divide-gray-200 dark:divide-gray-800 pointer-events-none">
+<div></div><div></div><div></div><div></div>
+</div>
+<div class="absolute bottom-1 left-2 text-[10px] text-gray-400 font-mono">25-12-10 12:20:13</div>
+<div class="absolute bottom-1 right-2 text-[10px] text-gray-400 font-mono">2025-12-10 13:39:53</div>
+</div>
+</div>
+</div>
+<div class="col-span-1 lg:col-span-2 flex flex-col gap-4 relative">
+<div class="grid grid-cols-4 gap-2">
+<div class="bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-200 dark:border-blue-800 p-2 rounded text-center relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-full h-1 bg-blue-500"></div>
+<div class="text-xs text-gray-500 dark:text-gray-300">实时在线用户数</div>
+<div class="text-2xl font-bold text-secondary font-mono mt-1 group-hover:scale-110 transition-transform">14</div>
+</div>
+<div class="bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-200 dark:border-blue-800 p-2 rounded text-center relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-full h-1 bg-blue-400"></div>
+<div class="text-xs text-gray-500 dark:text-gray-300">日活跃用户数</div>
+<div class="text-2xl font-bold text-secondary font-mono mt-1 group-hover:scale-110 transition-transform">40</div>
+</div>
+<div class="bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-200 dark:border-blue-800 p-2 rounded text-center relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-full h-1 bg-cyan-400"></div>
+<div class="text-xs text-gray-500 dark:text-gray-300">月活跃用户数</div>
+<div class="text-2xl font-bold text-secondary font-mono mt-1 group-hover:scale-110 transition-transform">133</div>
+</div>
+<div class="bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-200 dark:border-blue-800 p-2 rounded text-center relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-full h-1 bg-indigo-500"></div>
+<div class="text-xs text-gray-500 dark:text-gray-300">总用户数</div>
+<div class="text-2xl font-bold text-secondary font-mono mt-1 group-hover:scale-110 transition-transform">351</div>
+</div>
+</div>
+<div class="flex-1 bg-panel-light dark:bg-panel-dark border border-border-light dark:border-border-dark shadow-sm dark:shadow-glow rounded-sm relative p-4 flex flex-col items-center justify-center overflow-hidden min-h-[500px]">
+<h3 class="absolute top-4 w-full text-center text-lg font-bold text-gray-800 dark:text-white z-10">全国日活跃用户分布统计</h3>
+<div class="absolute inset-0 grid-bg opacity-30 pointer-events-none"></div>
+<div class="relative w-full h-full max-w-lg mx-auto flex items-center justify-center">
+<img alt="China Map Distribution" class="w-full h-auto opacity-20 dark:opacity-30 filter dark:invert dark:sepia dark:saturate-200 dark:hue-rotate-180" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJAsLtLY7rUS2Y2lWJ7UgYohJe2DXCRun21TOYJ1xBUCr8uL5KHQovHQC391MVpZxiqrN0sz0lGMEsmmHgL0t-5448E2kUBWIYdSasgGFuPa8lt6CC0471hIQQzUOUyEhV2ck4OM1Agik8PYWSnVuGwM7yi1F1ZOFvZ9WeiudAZupb3w-fAoT1Tvz58_uKwEKjghMaom78-IWwjJW-uzts3Bm9b87ozS8eVsS0A_uyCx0-mSlgn1-8UQo0_LdwD3gkbEprhuZmRHs"/>
+<div class="absolute top-[40%] left-[65%] w-12 h-12 bg-yellow-400 rounded-full blur-xl opacity-60 animate-pulse"></div>
+<div class="absolute top-[45%] left-[70%] w-16 h-16 bg-red-500 rounded-full blur-xl opacity-50"></div>
+<div class="absolute top-[35%] left-[75%] w-8 h-8 bg-green-400 rounded-full blur-lg opacity-70"></div>
+<div class="absolute top-[60%] left-[60%] w-10 h-10 bg-blue-400 rounded-full blur-lg opacity-60"></div>
+<div class="absolute top-[42%] left-[68%] w-2 h-2 bg-white rounded-full shadow-[0_0_10px_white]"></div>
+<div class="absolute top-[48%] left-[72%] w-2 h-2 bg-white rounded-full shadow-[0_0_10px_white]"></div>
+</div>
+<div class="absolute bottom-4 left-4 bg-white/80 dark:bg-black/60 p-2 rounded text-xs border border-gray-200 dark:border-gray-700">
+<div class="h-24 w-4 rounded bg-gradient-to-t from-green-500 via-yellow-500 to-red-500 mx-auto"></div>
+<div class="text-center mt-1">Intensity</div>
+</div>
+<div class="absolute bottom-4 right-10 w-24 h-32 border border-gray-400 dark:border-blue-800 bg-gray-100 dark:bg-[#081020]">
+<div class="text-[8px] text-center p-1 opacity-50">南海诸岛</div>
+<div class="w-full h-full flex items-center justify-center text-xs opacity-20"><i class="fa-solid fa-map"></i></div>
+</div>
+</div>
+</div>
+<div class="col-span-1 flex flex-col gap-4">
+<div class="tech-card bg-panel-light dark:bg-panel-dark border border-border-light dark:border-border-dark shadow-sm dark:shadow-glow p-3 rounded-sm h-[250px] flex flex-col">
+<h3 class="text-sm font-semibold text-primary mb-3 border-l-2 border-primary pl-2 flex items-center">
+<i class="fa-solid fa-users mr-2"></i>用户分布
+                        </h3>
+<div class="flex-1 overflow-auto text-xs">
+<table class="w-full text-left">
+<thead class="bg-gray-100 dark:bg-blue-900/20 text-gray-600 dark:text-blue-300">
+<tr>
+<th class="p-2">省份</th>
+<th class="p-2 text-right">日活(个)</th>
+<th class="p-2 text-right">月活(个)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-gray-100 dark:divide-blue-900/30 text-gray-700 dark:text-gray-300">
+<tr class="dark:even:bg-white/5 even:bg-gray-50">
+<td class="p-2">内蒙古自治区</td>
+<td class="p-2 text-right font-mono text-secondary">1</td>
+<td class="p-2 text-right font-mono text-secondary">2</td>
+</tr>
+<tr class="dark:even:bg-white/5 even:bg-gray-50">
+<td class="p-2">青海省</td>
+<td class="p-2 text-right font-mono text-secondary">1</td>
+<td class="p-2 text-right font-mono text-secondary">2</td>
+</tr>
+<tr class="dark:even:bg-white/5 even:bg-gray-50">
+<td class="p-2">辽宁省</td>
+<td class="p-2 text-right font-mono text-secondary">1</td>
+<td class="p-2 text-right font-mono text-secondary">4</td>
+</tr>
+<tr class="dark:even:bg-white/5 even:bg-gray-50">
+<td class="p-2">山东省</td>
+<td class="p-2 text-right font-mono text-secondary">3</td>
+<td class="p-2 text-right font-mono text-secondary">8</td>
+</tr>
+<tr class="dark:even:bg-white/5 even:bg-gray-50">
+<td class="p-2">浙江省</td>
+<td class="p-2 text-right font-mono text-secondary">2</td>
+<td class="p-2 text-right font-mono text-secondary">5</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="tech-card bg-panel-light dark:bg-panel-dark border border-border-light dark:border-border-dark shadow-sm dark:shadow-glow p-3 rounded-sm h-[200px] flex flex-col">
+<h3 class="text-sm font-semibold text-primary mb-2 border-l-2 border-primary pl-2">日活跃用户态势曲线</h3>
+<div class="flex-1 relative w-full h-full bg-gray-50 dark:bg-black/20 rounded border border-dashed border-gray-300 dark:border-gray-700 flex items-center justify-center overflow-hidden">
+<div class="absolute top-2 left-2 text-[10px] text-gray-500">用户数/个</div>
+<svg class="w-full h-full absolute bottom-0 left-0 px-2 pb-6 text-secondary" preserveAspectRatio="none" viewBox="0 0 300 100">
+<path d="M0,50 L50,50 L60,30 L100,30 L250,30 L260,60 L300,60" fill="none" stroke="currentColor" stroke-width="2"></path>
+<path d="M0,50 L50,50 L60,30 L100,30 L250,30 L260,60 L300,60 V100 H0 Z" fill="url(#grad3)" opacity="0.3"></path>
+<defs>
+<linearGradient id="grad3" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:currentColor;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:currentColor;stop-opacity:0"></stop>
+</linearGradient>
+</defs>
+</svg>
+<div class="absolute bottom-1 w-full flex justify-between px-2 text-[8px] text-gray-400 font-mono">
+<span>2024-11-11</span>
+<span>2024-11-25</span>
+<span>2024-12-09</span>
+</div>
+</div>
+</div>
+<div class="tech-card bg-panel-light dark:bg-panel-dark border border-border-light dark:border-border-dark shadow-sm dark:shadow-glow p-3 rounded-sm h-[200px] flex flex-col">
+<h3 class="text-sm font-semibold text-primary mb-2 border-l-2 border-primary pl-2">月活跃用户态势曲线</h3>
+<div class="flex-1 relative w-full h-full bg-gray-50 dark:bg-black/20 rounded border border-dashed border-gray-300 dark:border-gray-700 flex items-center justify-center overflow-hidden">
+<div class="absolute top-2 left-2 text-[10px] text-gray-500">用户数/个</div>
+<svg class="w-full h-full absolute bottom-0 left-0 px-2 pb-6 text-primary" preserveAspectRatio="none" viewBox="0 0 300 100">
+<path d="M0,90 L200,90 Q220,90 230,70 L250,30 Q260,20 280,20 L300,20" fill="none" stroke="currentColor" stroke-width="2"></path>
+<path d="M0,90 L200,90 Q220,90 230,70 L250,30 Q260,20 280,20 L300,20 V100 H0 Z" fill="url(#grad4)" opacity="0.3"></path>
+<defs>
+<linearGradient id="grad4" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:currentColor;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:currentColor;stop-opacity:0"></stop>
+</linearGradient>
+</defs>
+</svg>
+<div class="absolute bottom-1 w-full flex justify-between px-2 text-[8px] text-gray-400 font-mono">
+<span>2025-01</span>
+<span>2025-05</span>
+<span>2025-11</span>
+</div>
+</div>
+</div>
+</div>
+<div class="tech-card bg-panel-light dark:bg-panel-dark border border-border-light dark:border-border-dark shadow-sm dark:shadow-glow p-3 rounded-sm h-[220px]">
+<h3 class="text-sm font-semibold text-primary mb-2 border-l-2 border-primary pl-2">用户分组统计</h3>
+<div class="h-full flex items-center justify-center relative -mt-4">
+<div class="relative w-32 h-32 rounded-full border-[10px] border-blue-900 flex items-center justify-center">
+<div class="absolute inset-0 rounded-full border-[10px] border-primary border-t-transparent border-l-transparent -rotate-45"></div>
+<div class="absolute inset-0 rounded-full border-[10px] border-cyan-400 border-b-transparent border-r-transparent rotate-12" style="clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);"></div>
+<div class="text-center z-10">
+<div class="text-[10px] text-gray-400">用户个数</div>
+</div>
+</div>
+<div class="absolute top-4 left-4 text-xs text-gray-500">其他: 115个</div>
+<div class="absolute bottom-4 left-4 text-xs text-gray-500">大众用户: 14个</div>
+<div class="absolute top-10 right-2 text-xs text-gray-500">内部测试: 127个</div>
+</div>
+</div>
+<div class="tech-card bg-panel-light dark:bg-panel-dark border border-border-light dark:border-border-dark shadow-sm dark:shadow-glow p-3 rounded-sm h-[220px]">
+<h3 class="text-sm font-semibold text-primary mb-2 border-l-2 border-primary pl-2">用户组平均服务时长(单位:小时)</h3>
+<div class="h-full flex items-end justify-around pb-6 px-4 -mt-2">
+<div class="flex flex-col items-center w-12 group">
+<div class="text-xs text-secondary mb-1">8.43</div>
+<div class="w-4 bg-gradient-to-t from-blue-900 to-secondary h-24 rounded-t hover:bg-secondary transition-all"></div>
+<div class="mt-2 text-[10px] text-gray-400">大众用户</div>
+</div>
+<div class="flex flex-col items-center w-12 group">
+<div class="text-xs text-secondary mb-1">5.27</div>
+<div class="w-4 bg-gradient-to-t from-blue-900 to-secondary h-16 rounded-t hover:bg-secondary transition-all"></div>
+<div class="mt-2 text-[10px] text-gray-400">内部测试</div>
+</div>
+<div class="flex flex-col items-center w-12 group">
+<div class="text-xs text-secondary mb-1">0.36</div>
+<div class="w-4 bg-gradient-to-t from-blue-900 to-secondary h-4 rounded-t hover:bg-secondary transition-all"></div>
+<div class="mt-2 text-[10px] text-gray-400">行业用户</div>
+</div>
+<div class="flex flex-col items-center w-12 group">
+<div class="text-xs text-secondary mb-1">0.33</div>
+<div class="w-4 bg-gradient-to-t from-blue-900 to-secondary h-4 rounded-t hover:bg-secondary transition-all"></div>
+<div class="mt-2 text-[10px] text-gray-400">默认</div>
+</div>
+</div>
+</div>
+<div class="tech-card bg-panel-light dark:bg-panel-dark border border-border-light dark:border-border-dark shadow-sm dark:shadow-glow p-3 rounded-sm h-[220px]">
+<h3 class="text-sm font-semibold text-primary mb-2 border-l-2 border-primary pl-2">用户统计(前十省份)</h3>
+<div class="h-full flex items-center justify-center -mt-4">
+<div class="relative w-32 h-32 rounded-full border-8 border-gray-700 dark:border-blue-900/40 flex items-center justify-center">
+<svg class="absolute inset-0 w-full h-full -rotate-90">
+<circle cx="50%" cy="50%" fill="none" r="40%" stroke="#eab308" stroke-dasharray="80 200" stroke-dashoffset="0" stroke-width="8"></circle>
+<circle cx="50%" cy="50%" fill="none" r="40%" stroke="#22c55e" stroke-dasharray="40 200" stroke-dashoffset="-80" stroke-width="8"></circle>
+<circle cx="50%" cy="50%" fill="none" r="40%" stroke="#3b82f6" stroke-dasharray="60 200" stroke-dashoffset="-120" stroke-width="8"></circle>
+</svg>
+<div class="text-center">
+<span class="text-xs text-gray-400 font-bold">省份</span>
+</div>
+</div>
+<div class="ml-4 space-y-1">
+<div class="flex items-center text-[10px] text-gray-500"><span class="w-2 h-2 rounded-full bg-yellow-500 mr-2"></span>江苏省</div>
+<div class="flex items-center text-[10px] text-gray-500"><span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>吉林省</div>
+<div class="flex items-center text-[10px] text-gray-500"><span class="w-2 h-2 rounded-full bg-blue-500 mr-2"></span>辽宁省</div>
+<div class="flex items-center text-[10px] text-gray-500"><span class="w-2 h-2 rounded-full bg-gray-600 mr-2"></span>山西省</div>
+</div>
+</div>
+</div>
+<div class="tech-card bg-panel-light dark:bg-panel-dark border border-border-light dark:border-border-dark shadow-sm dark:shadow-glow p-3 rounded-sm h-[220px] relative overflow-hidden">
+<h3 class="text-sm font-semibold text-primary mb-2 border-l-2 border-primary pl-2 z-10 relative">山东省各市日活跃用户数量统计</h3>
+<div class="absolute inset-0 pt-8 flex items-center justify-center">
+<img alt="Shandong Map" class="h-full w-auto opacity-40 dark:opacity-60 dark:invert" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDV5CISSIUmPdDDvrxCrC65r7jfDLeNX4JyJ2WbCzXFoYs2i9NiX_ATbCQc-0JxDX8UeIUITWLePYrZQqDQ944WCGb5ayT6gChAPM58YWEIL7TWLkP_BjcxiKjNAuTcf1qf3BXHeiQzd5C-RgDau0fYM26aV4Rn1t2FaMlbUFyLXszH8KFrjClTgH5wEQ0c3oPtoybQpg_dguJP7Po5hrHYVCrJBBCCkjrCd8l2AFzyJ_fNhiuexkw03M0iAKICd4na8C4W8UMTpcU"/>
+<div class="absolute w-2 h-2 bg-red-500 rounded-full top-[40%] left-[50%] animate-ping"></div>
+<div class="absolute w-2 h-2 bg-yellow-500 rounded-full top-[30%] left-[40%]"></div>
+<div class="absolute w-2 h-2 bg-green-500 rounded-full top-[50%] left-[60%]"></div>
+</div>
+<div class="absolute left-3 bottom-3 h-24 w-2 bg-gradient-to-t from-blue-900 to-orange-500 rounded-full border border-gray-600"></div>
+<div class="absolute left-6 bottom-3 text-[10px] text-gray-400">0</div>
+<div class="absolute left-6 top-10 text-[10px] text-gray-400">1</div>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>
