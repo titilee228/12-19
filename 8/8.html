@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Broadcast Status Monitoring Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        page: "#020511",      // Deepest Space Blue
+                        panel: "#060d21",     // Panel Background
+                        surface: "#0f1c3f",   // Card/Surface
+                        border: "#1d3a6e",    // Tech Blue Border
+                        primary: "#00f0ff",   // Cyber Cyan
+                        secondary: "#2563eb", // Deep Blue
+                        accent: "#f59e0b",    // Warning Orange
+                        "text-main": "#e2e8f0",
+                        "text-muted": "#94a3b8",
+                    },
+                    fontFamily: {
+                        sans: ["'Noto Sans SC'", "sans-serif"],
+                    },
+                    backgroundImage: {
+                        'tech-grid': "radial-gradient(circle, rgba(29, 58, 110, 0.4) 1px, transparent 1px)",
+                        'active-gradient': "linear-gradient(90deg, rgba(0, 240, 255, 0.15) 0%, rgba(0, 240, 255, 0) 100%)",
+                        'bar-gradient': "linear-gradient(180deg, #00f0ff 0%, #2563eb 100%)",
+                    },
+                    boxShadow: {
+                        'glow': '0 0 10px rgba(0, 240, 255, 0.5)',
+                        'glow-orange': '0 0 10px rgba(245, 158, 11, 0.5)',
+                    }
+                },
+            },
+        };
+    </script>
+<style>
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #020511; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1d3a6e; 
+            border-radius: 2px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f0ff; 
+        }
+        .glowing-dot {
+            box-shadow: 0 0 12px 3px rgba(0, 240, 255, 0.6);
+        }
+        .glowing-dot-orange {
+            box-shadow: 0 0 12px 3px rgba(245, 158, 11, 0.6);
+        }.tech-map-filter {
+            filter: invert(1) grayscale(100%) brightness(1.5) contrast(1.2) drop-shadow(0 0 5px #00f0ff);
+            opacity: 0.3;
+            mix-blend-mode: lighten;
+        }
+    </style>
+</head>
+<body class="bg-page text-text-main font-sans overflow-hidden h-screen flex flex-col selection:bg-primary selection:text-black">
+<header class="h-16 flex items-center justify-between px-6 bg-panel border-b border-border z-30 shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+<div class="flex items-center gap-4">
+<div class="relative w-8 h-8 flex items-center justify-center bg-gradient-to-br from-blue-600 to-blue-900 rounded border border-blue-400 shadow-glow">
+<span class="material-symbols-outlined text-white text-[20px]">satellite_alt</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-wider text-white bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-200">中国时空高精度定位综合服务平台</h1>
+</div>
+</div>
+<div class="flex items-center gap-6 text-text-muted">
+<div class="flex items-center gap-2 px-3 py-1 rounded-full bg-surface border border-border text-xs">
+<span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+<span>系统运行正常</span>
+</div>
+<div class="h-4 w-px bg-border"></div>
+<span class="text-sm font-mono tracking-wider">2023-10-27 14:32:45</span>
+<div class="h-4 w-px bg-border"></div>
+<button class="hover:text-primary transition-colors duration-300">
+<span class="material-symbols-outlined text-[22px]">notifications</span>
+</button>
+<button class="hover:text-primary transition-colors duration-300">
+<span class="material-symbols-outlined text-[22px]">settings</span>
+</button>
+<button class="hover:text-primary transition-colors duration-300">
+<span class="material-symbols-outlined text-[22px]">account_circle</span>
+</button>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<aside class="w-64 flex flex-col bg-panel border-r border-border z-20">
+<nav class="flex-1 py-6 space-y-1">
+<a class="flex items-center px-6 py-3 text-text-muted hover:text-white hover:bg-surface transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px] mr-4 group-hover:text-primary transition-colors">timeline</span>
+<span class="text-sm font-medium tracking-wide">用户态势</span>
+</a>
+<a class="flex items-center justify-between px-6 py-3 text-text-muted hover:text-white hover:bg-surface transition-all group" href="#">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-[20px] mr-4 group-hover:text-primary transition-colors">dns</span>
+<span class="text-sm font-medium tracking-wide">产品接入</span>
+</div>
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</a>
+<a class="flex items-center px-6 py-3 text-text-muted hover:text-white hover:bg-surface transition-all group" href="#">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-[20px] mr-4 group-hover:text-primary transition-colors">group</span>
+<span class="text-sm font-medium tracking-wide">用户管理</span>
+</div>
+</a>
+<div class="relative">
+<div class="absolute left-0 top-0 bottom-0 w-[3px] bg-primary shadow-glow"></div>
+<a class="flex items-center px-6 py-3 bg-active-gradient text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[20px] mr-4 text-primary">sensors</span>
+<span class="text-sm font-medium tracking-wide">播发监视</span>
+</a>
+</div>
+<a class="flex items-center justify-between px-6 py-3 text-text-muted hover:text-white hover:bg-surface transition-all group" href="#">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-[20px] mr-4 group-hover:text-primary transition-colors">monitor_heart</span>
+<span class="text-sm font-medium tracking-wide">运行监控</span>
+</div>
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</a>
+<a class="flex items-center justify-between px-6 py-3 text-text-muted hover:text-white hover:bg-surface transition-all group" href="#">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-[20px] mr-4 group-hover:text-primary transition-colors">support_agent</span>
+<span class="text-sm font-medium tracking-wide">服务监控</span>
+</div>
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</a>
+<a class="flex items-center px-6 py-3 text-text-muted hover:text-white hover:bg-surface transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px] mr-4 group-hover:text-primary transition-colors">settings_suggest</span>
+<span class="text-sm font-medium tracking-wide">系统管理</span>
+</a>
+</nav>
+<div class="p-4 border-t border-border">
+<div class="bg-surface/50 rounded p-3 flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-blue-900/50 flex items-center justify-center text-primary font-bold text-xs">V2.0</div>
+<div class="flex flex-col">
+<span class="text-[10px] text-text-muted">Current Version</span>
+<span class="text-xs text-white">Stable Release</span>
+</div>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex relative bg-page">
+<section class="flex-1 relative flex flex-col p-4 overflow-hidden">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary text-sm">home</span>
+<span class="text-text-muted text-xs">/</span>
+<span class="text-text-muted text-xs">播发监视</span>
+<span class="text-text-muted text-xs">/</span>
+<span class="text-primary text-xs font-medium">态势大屏</span>
+</div>
+<div class="flex items-center justify-between mb-2">
+<h2 class="text-2xl font-bold text-white tracking-wide flex items-center gap-2">
+<span class="w-1 h-6 bg-primary rounded-sm shadow-glow"></span>
+                        播发态势监视
+                    </h2>
+<div class="flex gap-2">
+<button class="bg-surface border border-border px-3 py-1 rounded text-xs text-primary hover:bg-blue-900/40 transition-colors">实时刷新</button>
+<button class="bg-surface border border-border px-3 py-1 rounded text-xs text-text-muted hover:text-white hover:bg-blue-900/40 transition-colors">导出报告</button>
+</div>
+</div>
+<div class="flex-1 relative w-full h-full rounded-xl overflow-hidden border border-border bg-[#03091a] shadow-inner shadow-black/50 group">
+<div class="absolute inset-0 bg-[size:30px_30px] bg-tech-grid opacity-30 pointer-events-none"></div>
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_20%,#020511_100%)] z-10 pointer-events-none"></div>
+<div class="absolute inset-0 flex items-center justify-center p-8 overflow-hidden">
+<img alt="Map of China" class="w-full h-full object-contain tech-map-filter transform scale-95 transition-transform duration-[10s] ease-in-out group-hover:scale-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOd3lOUtes0wRRl7RYy43pPN9SjEWypjrXE3RZHVZMUPkAW3hF20esvXZDmMjV_TvDrI4ZshbQl_RNV0eNzeIVf4jzxo9TqMIUY8rRZjpmwZGckIU6ukNLmv6-3_8WNbkWB6f4hY0rQa5S9u2vcrVmkAkMG97Qu-I5GH4hXtAZ6z52dVPaRY0Ajv76gJA2DNOAf2mbE9Ju8-Zk-nd5bRsGbSWR63lt9_kbMsohjpKkXjGaMdpZSM4j-tV31PXO0nBpb42x729-0_U"/>
+</div>
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+<div class="w-[600px] h-[600px] border border-primary/10 rounded-full animate-[spin_10s_linear_infinite]"></div>
+<div class="w-[400px] h-[400px] border border-primary/20 rounded-full absolute"></div>
+</div>
+<div class="absolute top-1/3 left-1/3 w-2 h-2 rounded-full bg-primary glowing-dot animate-pulse z-20"></div>
+<div class="absolute top-1/2 left-1/2 w-2 h-2 rounded-full bg-primary glowing-dot animate-pulse delay-75 z-20"></div>
+<div class="absolute top-1/4 right-1/3 w-2 h-2 rounded-full bg-primary glowing-dot animate-pulse delay-150 z-20"></div>
+<div class="absolute bottom-1/3 right-1/4 w-2 h-2 rounded-full bg-primary glowing-dot animate-pulse delay-300 z-20"></div>
+<div class="absolute top-1/2 right-1/3 w-2 h-2 rounded-full bg-accent glowing-dot-orange animate-bounce z-20">
+<div class="absolute -top-6 -left-6 w-14 text-[10px] text-accent text-center opacity-0 group-hover:opacity-100 transition-opacity">异常信号</div>
+</div>
+<div class="absolute bottom-1/4 left-1/3 w-2 h-2 rounded-full bg-primary glowing-dot animate-pulse z-20"></div>
+<div class="absolute top-[40%] left-[45%] w-2 h-2 rounded-full bg-primary glowing-dot animate-pulse z-20"></div>
+<div class="absolute bottom-6 right-6 w-28 h-36 border border-border bg-surface/80 backdrop-blur-md rounded shadow-lg z-30 flex flex-col">
+<div class="flex-1 relative">
+<div class="absolute top-4 left-4 w-1 h-1 bg-primary rounded-full shadow-glow"></div>
+<div class="absolute bottom-8 right-6 w-1 h-1 bg-primary rounded-full shadow-glow"></div>
+<div class="absolute top-10 right-8 w-0.5 h-0.5 bg-primary/50 rounded-full"></div>
+</div>
+<div class="py-1 border-t border-border/50 text-[10px] text-primary text-center bg-black/20 font-medium tracking-widest">南海诸岛</div>
+</div>
+<div class="absolute bottom-6 left-6 flex items-center gap-6 bg-surface/90 backdrop-blur border border-border px-4 py-2 rounded-lg z-30 shadow-lg">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-primary shadow-glow"></div>
+<span class="text-xs font-medium text-gray-200">正常运行 (Grid)</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-accent shadow-glow-orange"></div>
+<span class="text-xs font-medium text-gray-200">在线用户 (Active)</span>
+</div>
+</div>
+</div>
+</section>
+<aside class="w-80 flex flex-col p-6 space-y-6 bg-panel border-l border-border overflow-y-auto z-20 shadow-[-4px_0_20px_rgba(0,0,0,0.3)]">
+<div class="flex flex-col bg-surface/30 p-4 rounded-xl border border-border/50 backdrop-blur-sm">
+<div class="flex items-center justify-between mb-4 border-b border-border/50 pb-2">
+<h3 class="text-sm font-semibold text-white tracking-wide flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-base">bar_chart</span>
+                            用户分组统计
+                        </h3>
+<span class="text-[10px] text-primary px-1.5 py-0.5 bg-primary/10 rounded border border-primary/20">Live</span>
+</div>
+<div class="relative h-40 w-full flex items-end justify-between gap-1 px-1">
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-10 z-0">
+<div class="border-t border-white w-full h-0"></div>
+<div class="border-t border-white w-full h-0"></div>
+<div class="border-t border-white w-full h-0"></div>
+<div class="border-t border-white w-full h-0"></div>
+</div>
+<div class="flex flex-col items-center flex-1 group z-10 cursor-pointer">
+<div class="w-full mx-1 bg-bar-gradient h-[80%] rounded-t-sm opacity-90 group-hover:opacity-100 group-hover:shadow-[0_0_10px_#00f0ff] transition-all relative">
+<span class="absolute -top-5 left-1/2 -translate-x-1/2 text-[10px] text-primary opacity-0 group-hover:opacity-100 transition-opacity">351</span>
+</div>
+<span class="text-[9px] mt-2 text-text-muted text-center transform scale-90">总量</span>
+</div>
+<div class="flex flex-col items-center flex-1 group z-10 cursor-pointer">
+<div class="w-full mx-1 bg-bar-gradient h-[40%] rounded-t-sm opacity-80 group-hover:opacity-100 group-hover:shadow-[0_0_10px_#00f0ff] transition-all relative">
+<span class="absolute -top-5 left-1/2 -translate-x-1/2 text-[10px] text-primary opacity-0 group-hover:opacity-100 transition-opacity">127</span>
+</div>
+<span class="text-[9px] mt-2 text-text-muted text-center transform scale-90">内测</span>
+</div>
+<div class="flex flex-col items-center flex-1 group z-10 cursor-pointer">
+<div class="w-full mx-1 bg-bar-gradient h-[30%] rounded-t-sm opacity-70 group-hover:opacity-100 group-hover:shadow-[0_0_10px_#00f0ff] transition-all relative">
+<span class="absolute -top-5 left-1/2 -translate-x-1/2 text-[10px] text-primary opacity-0 group-hover:opacity-100 transition-opacity">94</span>
+</div>
+<span class="text-[9px] mt-2 text-text-muted text-center transform scale-90">行业</span>
+</div>
+<div class="flex flex-col items-center flex-1 group z-10 cursor-pointer">
+<div class="w-full mx-1 bg-bar-gradient h-[10%] rounded-t-sm opacity-60 group-hover:opacity-100 group-hover:shadow-[0_0_10px_#00f0ff] transition-all relative">
+<span class="absolute -top-5 left-1/2 -translate-x-1/2 text-[10px] text-primary opacity-0 group-hover:opacity-100 transition-opacity">14</span>
+</div>
+<span class="text-[9px] mt-2 text-text-muted text-center transform scale-90">大众</span>
+</div>
+<div class="flex flex-col items-center flex-1 group z-10 cursor-pointer">
+<div class="w-full mx-1 bg-bar-gradient h-[35%] rounded-t-sm opacity-70 group-hover:opacity-100 group-hover:shadow-[0_0_10px_#00f0ff] transition-all relative">
+<span class="absolute -top-5 left-1/2 -translate-x-1/2 text-[10px] text-primary opacity-0 group-hover:opacity-100 transition-opacity">115</span>
+</div>
+<span class="text-[9px] mt-2 text-text-muted text-center transform scale-90">其他</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col bg-surface/30 p-4 rounded-xl border border-border/50 backdrop-blur-sm">
+<div class="flex items-center justify-between mb-2 border-b border-border/50 pb-2">
+<h3 class="text-sm font-semibold text-white tracking-wide flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-base">donut_large</span>
+                            用户分组分布
+                        </h3>
+</div>
+<div class="relative flex items-center justify-center h-44 w-full">
+<div class="relative w-32 h-32 animate-[spin_30s_linear_infinite]">
+<svg class="w-full h-full rotate-[-90deg]" viewBox="0 0 36 36">
+<path class="text-surface stroke-current" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="2"></path>
+<path class="text-blue-900 stroke-current drop-shadow-[0_0_2px_rgba(30,58,138,0.8)]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-dasharray="80, 100" stroke-linecap="butt" stroke-width="4"></path>
+<path class="text-primary stroke-current drop-shadow-[0_0_5px_#00f0ff]" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-dasharray="20, 100" stroke-dashoffset="-80" stroke-linecap="butt" stroke-width="4"></path>
+</svg>
+</div>
+<div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+<span class="text-xs text-text-muted">Total</span>
+<span class="text-xl font-bold text-white tracking-widest font-mono">100%</span>
+</div>
+<div class="absolute -right-2 top-0 flex flex-col gap-2">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded bg-primary shadow-glow"></div>
+<span class="text-[10px] text-text-muted">在播发</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded bg-blue-900"></div>
+<span class="text-[10px] text-text-muted">未播发</span>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col bg-surface/30 p-4 rounded-xl border border-border/50 backdrop-blur-sm flex-1">
+<div class="flex items-center justify-between mb-4 border-b border-border/50 pb-2">
+<h3 class="text-sm font-semibold text-white tracking-wide flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-base">grid_view</span>
+                            格网点及用户统计
+                        </h3>
+</div>
+<div class="relative h-full min-h-[120px] w-full flex items-end justify-around px-8 gap-12 pb-2">
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-10">
+<div class="border-t border-dashed border-white w-full"></div>
+<div class="border-t border-dashed border-white w-full"></div>
+<div class="border-t border-dashed border-white w-full"></div>
+</div>
+<div class="flex flex-col items-center w-12 group relative">
+<span class="text-xs font-mono text-primary mb-2 opacity-0 group-hover:opacity-100 transition-all absolute -top-6">1050</span>
+<div class="w-8 bg-bar-gradient h-36 rounded-t shadow-[0_0_15px_rgba(0,240,255,0.4)] hover:brightness-125 transition-all"></div>
+<div class="w-full h-[1px] bg-primary mt-0 shadow-[0_0_5px_#00f0ff]"></div>
+<span class="text-xs mt-3 text-gray-300 font-medium">格网点</span>
+</div>
+<div class="flex flex-col items-center w-12 group relative">
+<span class="text-xs font-mono text-primary mb-2 opacity-0 group-hover:opacity-100 transition-all absolute -top-6">13</span>
+<div class="w-8 bg-gradient-to-t from-blue-800 to-blue-500 h-8 rounded-t hover:brightness-125 transition-all"></div>
+<div class="w-full h-[1px] bg-blue-500 mt-0"></div>
+<span class="text-xs mt-3 text-gray-300 font-medium">用户</span>
+</div>
+</div>
+</div>
+</aside>
+</main>
+</div>
+
+</body></html>
